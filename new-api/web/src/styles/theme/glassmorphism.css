@@ -16,9 +16,10 @@
 
 :root {
   /* ==================== 背景 ==================== */
-  --theme-bg-gradient: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 30%, #16213e 60%, #0f3460 100%);
-  --theme-bg-base: #0f0f0f;
-  --theme-bg-elevated: #1a1a2e;
+  /* 调亮版渐变 - 减少压抑感 */
+  --theme-bg-gradient: linear-gradient(135deg, #1a1a1a 0%, #252538 30%, #1e2d4d 60%, #1a4070 100%);
+  --theme-bg-base: #1a1a1a;
+  --theme-bg-elevated: #252538;
 
   /* ==================== 主色/点缀色 ==================== */
   --theme-accent: #00d9ff;

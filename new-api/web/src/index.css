@@ -104,6 +104,50 @@ code {
   height: var(--theme-header-height);
 }
 
+/* 顶栏按钮样式 */
+.header-bar .semi-button {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: var(--theme-text-secondary) !important;
+  border-radius: var(--theme-radius-md) !important;
+}
+
+.header-bar .semi-button:hover:not(:disabled) {
+  background: var(--theme-hover-bg) !important;
+  border-color: var(--theme-glass-border) !important;
+  color: var(--theme-text-primary) !important;
+}
+
+.header-bar .semi-button-primary {
+  background: var(--theme-accent-gradient) !important;
+  border: none !important;
+  color: var(--theme-text-inverse) !important;
+}
+
+.header-bar .semi-button-primary:hover:not(:disabled) {
+  box-shadow: var(--theme-shadow-glow-sm);
+}
+
+/* 顶栏导航链接 */
+.header-bar a {
+  color: var(--theme-text-secondary);
+  transition: color var(--theme-transition-fast);
+}
+
+.header-bar a:hover {
+  color: var(--theme-text-primary);
+}
+
+/* 顶栏头像 */
+.header-bar .semi-avatar {
+  border: 2px solid var(--theme-glass-border) !important;
+  transition: border-color var(--theme-transition-fast);
+}
+
+.header-bar .semi-avatar:hover {
+  border-color: var(--theme-accent) !important;
+}
+
 /* ==================== 侧边栏样式 ==================== */
 .semi-navigation-item {
   margin-bottom: var(--theme-spacing-xs) !important;
@@ -364,6 +408,31 @@ code {
   box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
 }
 
+/* Borderless 按钮 (表格操作按钮) */
+.semi-button-borderless,
+.semi-button[theme="borderless"] {
+  background: transparent !important;
+  border: none !important;
+  color: var(--theme-text-secondary) !important;
+}
+
+.semi-button-borderless:hover:not(:disabled),
+.semi-button[theme="borderless"]:hover:not(:disabled) {
+  background: var(--theme-hover-bg) !important;
+  color: var(--theme-text-primary) !important;
+}
+
+.semi-button-borderless.semi-button-danger,
+.semi-button[theme="borderless"].semi-button-danger {
+  color: var(--theme-danger) !important;
+}
+
+.semi-button-borderless.semi-button-danger:hover:not(:disabled),
+.semi-button[theme="borderless"].semi-button-danger:hover:not(:disabled) {
+  background: var(--theme-danger-bg) !important;
+  color: var(--theme-danger) !important;
+}
+
 /* ==================== 卡片样式 ==================== */
 .semi-card {
   background: var(--theme-glass-bg) !important;
@@ -399,49 +468,77 @@ code {
   backdrop-filter: var(--theme-glass-blur);
   -webkit-backdrop-filter: var(--theme-glass-blur);
   border: 1px solid var(--theme-glass-border) !important;
+  transition: transform var(--theme-transition-fast), box-shadow var(--theme-transition-fast), border-color var(--theme-transition-fast) !important;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--theme-shadow-card);
+  border-color: var(--theme-hover-border) !important;
 }
 
 .stats-card .semi-card-header {
   border-bottom: none !important;
+  padding-bottom: var(--theme-spacing-xs) !important;
+}
+
+.stats-card .semi-card-body {
+  padding-top: 0 !important;
+}
+
+/* 统计卡片标题 */
+.stats-card .semi-card-header-wrapper {
+  color: var(--theme-text-secondary) !important;
+  font-size: 13px !important;
 }
 
 .stats-card-label {
   font-size: 12px;
-  color: var(--theme-text-secondary);
+  color: var(--theme-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .stats-card-value {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--theme-text-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .stats-card-tag {
-  background: var(--theme-accent) !important;
+  background: var(--theme-accent-gradient) !important;
   color: var(--theme-text-inverse) !important;
   border: none !important;
-  font-weight: 500;
+  font-weight: 600;
+  padding: 6px 14px !important;
+  transition: transform var(--theme-transition-fast), box-shadow var(--theme-transition-fast) !important;
 }
 
 .stats-card-tag:hover {
+  transform: scale(1.05);
   box-shadow: var(--theme-shadow-glow-sm);
 }
 
-/* 统计卡片颜色变体 - 使用半透明点缀色 */
+/* 统计卡片颜色变体 - 左侧彩色边框 + 微妙背景 */
 .stats-card-blue {
   border-left: 3px solid #3b82f6 !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, var(--theme-glass-bg) 100%) !important;
 }
 
 .stats-card-green {
   border-left: 3px solid #10b981 !important;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, var(--theme-glass-bg) 100%) !important;
 }
 
 .stats-card-yellow {
   border-left: 3px solid #f59e0b !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, var(--theme-glass-bg) 100%) !important;
 }
 
 .stats-card-indigo {
   border-left: 3px solid #6366f1 !important;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, var(--theme-glass-bg) 100%) !important;
 }
 
 /* ==================== 表格样式 ==================== */
@@ -709,8 +806,20 @@ code {
 .semi-tooltip-wrapper {
   border-radius: var(--theme-radius-sm) !important;
   background: var(--theme-bg-elevated) !important;
+  backdrop-filter: var(--theme-glass-blur);
+  -webkit-backdrop-filter: var(--theme-glass-blur);
   border: 1px solid var(--theme-glass-border) !important;
   padding: var(--theme-spacing-xs) var(--theme-spacing-sm) !important;
+  box-shadow: var(--theme-shadow-card) !important;
+}
+
+.semi-tooltip-wrapper .semi-tooltip-content {
+  color: var(--theme-text-primary) !important;
+}
+
+/* Tooltip 箭头 */
+.semi-tooltip-wrapper .semi-tooltip-icon-arrow {
+  fill: var(--theme-bg-elevated) !important;
 }
 
 /* ==================== Switch 样式 ==================== */
