@@ -78,13 +78,10 @@ export const ThemeProvider = ({ children }) => {
   // 应用主题到DOM
   useEffect(() => {
     const body = document.body;
-    if (actualTheme === 'dark') {
-      body.setAttribute('theme-mode', 'dark');
-      document.documentElement.classList.add('dark');
-    } else {
-      body.removeAttribute('theme-mode');
-      document.documentElement.classList.remove('dark');
-    }
+    // Glassmorphism 深空灰主题始终使用暗色模式
+    // VChart 和 Semi Design 通过 theme-mode 属性检测主题
+    body.setAttribute('theme-mode', 'dark');
+    document.documentElement.classList.add('dark');
   }, [actualTheme]);
 
   const setTheme = useCallback((newTheme) => {

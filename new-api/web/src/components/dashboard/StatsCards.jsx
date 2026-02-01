@@ -39,7 +39,7 @@ const StatsCards = ({
           <Card
             key={idx}
             {...CARD_PROPS}
-            className={`${group.color} border-0 !rounded-2xl w-full`}
+            className={`stats-card ${group.colorClass} border-0 !rounded-2xl w-full`}
             title={group.title}
           >
             <div className='space-y-4'>
@@ -58,8 +58,8 @@ const StatsCards = ({
                       {item.icon}
                     </Avatar>
                     <div>
-                      <div className='text-xs text-gray-500'>{item.title}</div>
-                      <div className='text-lg font-semibold'>
+                      <div className='stats-card-label'>{item.title}</div>
+                      <div className='stats-card-value'>
                         <Skeleton
                           loading={loading}
                           active
@@ -82,7 +82,7 @@ const StatsCards = ({
                   </div>
                   {item.title === t('当前余额') ? (
                     <Tag
-                      color='white'
+                      className='stats-card-tag'
                       shape='circle'
                       size='large'
                       onClick={(e) => {
