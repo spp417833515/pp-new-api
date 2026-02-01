@@ -52,7 +52,31 @@ code {
   scrollbar-width: none;
 }
 
-/* ==================== 导航和侧边栏样式 ==================== */
+/* ==================== 导航和侧边栏样式 (Apple扁平化科技风) ==================== */
+
+/* --- Apple 科技风配色变量 --- */
+:root {
+  --apple-sidebar-bg: rgba(255, 255, 255, 0.72);
+  --apple-sidebar-border: rgba(0, 0, 0, 0.06);
+  --apple-item-hover: rgba(0, 0, 0, 0.04);
+  --apple-item-selected: rgba(0, 0, 0, 0.06);
+  --apple-accent: #007AFF;
+  --apple-text-primary: #1d1d1f;
+  --apple-text-secondary: #86868b;
+  --apple-icon-color: #636366;
+}
+
+html.dark {
+  --apple-sidebar-bg: rgba(30, 30, 30, 0.85);
+  --apple-sidebar-border: rgba(255, 255, 255, 0.08);
+  --apple-item-hover: rgba(255, 255, 255, 0.06);
+  --apple-item-selected: rgba(255, 255, 255, 0.1);
+  --apple-accent: #0A84FF;
+  --apple-text-primary: #f5f5f7;
+  --apple-text-secondary: #98989d;
+  --apple-icon-color: #98989d;
+}
+
 .semi-navigation-item {
   margin-bottom: 4px !important;
   padding: 4px 12px !important;
@@ -102,59 +126,87 @@ code {
   font-weight: 600 !important;
 }
 
-/* 自定义侧边栏样式 */
+/* --- 侧边栏容器 (毛玻璃效果) --- */
 .sidebar-container {
   height: 100%;
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
-  background: var(--semi-color-bg-0);
+  background: var(--apple-sidebar-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--apple-sidebar-border);
 }
 
+/* --- 侧边栏导航区域 --- */
 .sidebar-nav {
   flex: 1;
   width: 100%;
-  background: var(--semi-color-bg-0);
+  background: transparent;
   height: 100%;
   overflow: hidden;
   border-right: none;
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  padding: 8px 0;
 }
 
 .sidebar-nav::-webkit-scrollbar {
   display: none;
 }
 
-/* 侧边栏导航项样式 */
+/* --- 菜单项样式 (卡片化) --- */
 .sidebar-nav-item {
-  border-radius: 6px;
-  margin: 3px 8px;
-  transition: all 0.15s ease;
-  padding: 8px 12px;
+  border-radius: 10px;
+  margin: 2px 10px;
+  transition: background-color 0.2s ease;
+  padding: 10px 14px;
+  color: var(--apple-text-primary);
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .sidebar-nav-item:hover {
-  background-color: rgba(var(--semi-blue-0), 0.08);
-  color: var(--semi-color-primary);
+  background-color: var(--apple-item-hover);
+  color: var(--apple-text-primary);
 }
 
+/* --- 选中状态 (左侧指示条) --- */
 .sidebar-nav-item-selected {
-  background-color: rgba(var(--semi-blue-0), 0.12);
-  color: var(--semi-color-primary);
+  background-color: var(--apple-item-selected);
+  color: var(--apple-text-primary);
   font-weight: 500;
 }
 
-/* 图标容器样式 */
+.sidebar-nav-item-selected::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 18px;
+  background: var(--apple-accent);
+  border-radius: 0 3px 3px 0;
+}
+
+/* --- 图标容器样式 --- */
 .sidebar-icon-container {
   width: 22px;
   height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
-  transition: all 0.2s ease;
+  margin-right: 12px;
+  color: var(--apple-icon-color);
+  transition: color 0.2s ease;
+}
+
+.sidebar-nav-item:hover .sidebar-icon-container,
+.sidebar-nav-item-selected .sidebar-icon-container {
+  color: var(--apple-accent);
 }
 
 .sidebar-sub-icon-container {
@@ -163,28 +215,36 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
-  margin-left: 1px;
-  transition: all 0.2s ease;
+  margin-right: 12px;
+  margin-left: 2px;
+  color: var(--apple-icon-color);
+  transition: color 0.2s ease;
 }
 
-/* 分割线样式 */
+.sidebar-nav-item:hover .sidebar-sub-icon-container,
+.sidebar-nav-item-selected .sidebar-sub-icon-container {
+  color: var(--apple-accent);
+}
+
+/* --- 分割线样式 --- */
 .sidebar-divider {
-  margin: 4px 8px;
-  opacity: 0.15;
+  margin: 8px 14px;
+  border: none;
+  height: 1px;
+  background: var(--apple-sidebar-border);
 }
 
-/* 分组标签样式 */
+/* --- 分组标签样式 --- */
 .sidebar-group-label {
-  padding: 4px 15px 8px;
-  color: var(--semi-color-text-2);
-  font-size: 12px;
+  padding: 16px 14px 8px;
+  color: var(--apple-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  opacity: 0.8;
+  letter-spacing: 0.8px;
 }
 
-/* 底部折叠按钮 */
+/* --- 底部折叠按钮 --- */
 .sidebar-collapse-button {
   display: flex;
   justify-content: center;
@@ -192,24 +252,28 @@ code {
   padding: 12px;
   margin-top: auto;
   cursor: pointer;
-  background-color: var(--semi-color-bg-0);
+  background: transparent;
   position: sticky;
   bottom: 0;
   z-index: 10;
-  box-shadow: 0 -10px 10px -5px var(--semi-color-bg-0);
-  backdrop-filter: blur(4px);
-  border-top: 1px solid rgba(var(--semi-grey-0), 0.08);
+  border-top: 1px solid var(--apple-sidebar-border);
 }
 
 .sidebar-collapse-button-inner {
-  width: 28px;
-  height: 28px;
-  border-radius: 9999px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--semi-color-fill-0);
-  transition: all 0.2s ease;
+  background-color: var(--apple-item-hover);
+  color: var(--apple-icon-color);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-collapse-button-inner:hover {
+  background-color: var(--apple-item-selected);
+  color: var(--apple-accent);
 }
 
 .sidebar-collapse-icon-container {
@@ -217,24 +281,26 @@ code {
   transition: transform 0.3s ease;
 }
 
-/* 侧边栏区域容器 */
+/* --- 侧边栏区域容器 --- */
 .sidebar-section {
-  padding-top: 12px;
+  padding-top: 4px;
 }
 
+/* --- 移动端适配 --- */
 @media (max-width: 767px) {
   .sidebar-container {
-    background: var(--semi-color-bg-1);
-    border-right: 1px solid var(--semi-color-border);
+    background: var(--apple-sidebar-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--apple-sidebar-border);
   }
 
   .sidebar-nav {
-    background: var(--semi-color-bg-1);
+    background: transparent;
   }
 
   .sidebar-collapse-button {
-    background-color: var(--semi-color-bg-1);
-    box-shadow: 0 -10px 10px -5px var(--semi-color-bg-1);
+    background: transparent;
   }
 }
 
