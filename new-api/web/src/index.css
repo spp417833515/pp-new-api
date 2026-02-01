@@ -580,6 +580,22 @@ code {
   padding: 14px var(--theme-spacing-md) !important;
   border-bottom: 1px solid var(--theme-glass-border) !important;
   color: var(--theme-text-primary);
+  background: transparent !important;
+}
+
+/* 表格固定列背景 (操作列) */
+.semi-table-row-head[style*="sticky"],
+.semi-table-row-cell[style*="sticky"],
+.semi-table .semi-table-row-head.semi-table-cell-fixed-right,
+.semi-table .semi-table-row-cell.semi-table-cell-fixed-right,
+.semi-table .semi-table-row-head.semi-table-cell-fixed-left,
+.semi-table .semi-table-row-cell.semi-table-cell-fixed-left {
+  background: var(--theme-bg-elevated) !important;
+}
+
+.semi-table-row:hover .semi-table-row-cell.semi-table-cell-fixed-right,
+.semi-table-row:hover .semi-table-row-cell.semi-table-cell-fixed-left {
+  background: var(--theme-hover-bg) !important;
 }
 
 .semi-table-tbody > .semi-table-row:last-child > .semi-table-row-cell {
