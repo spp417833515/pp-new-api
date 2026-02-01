@@ -54,7 +54,38 @@ code {
   font-family: var(--theme-font-mono);
 }
 
-/* ==================== 滚动条隐藏 ==================== */
+/* ==================== 全局滚动条样式 ==================== */
+/* Webkit 浏览器 (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 217, 255, 0.4);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* 特定区域隐藏滚动条 (侧边栏等) */
 .semi-layout::-webkit-scrollbar,
 .semi-layout-content::-webkit-scrollbar,
 .semi-sider::-webkit-scrollbar {
@@ -1009,23 +1040,6 @@ th[style*="sticky"],
 .table-scroll-card .semi-card-body {
   flex: 1 1 auto;
   overflow-y: auto;
-}
-
-.table-scroll-card .semi-card-body::-webkit-scrollbar {
-  width: 6px;
-}
-
-.table-scroll-card .semi-card-body::-webkit-scrollbar-thumb {
-  background: var(--theme-glass-border);
-  border-radius: 3px;
-}
-
-.table-scroll-card .semi-card-body::-webkit-scrollbar-thumb:hover {
-  background: var(--theme-hover-bg);
-}
-
-.table-scroll-card .semi-card-body::-webkit-scrollbar-track {
-  background: transparent;
 }
 
 /* ==================== 模型定价页面布局 ==================== */
