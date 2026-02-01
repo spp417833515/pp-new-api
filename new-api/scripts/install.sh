@@ -37,16 +37,27 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # 检测 docker compose 命令
+USE_DOCKER_COMPOSE_V2=false
 detect_compose_cmd() {
     if docker compose version &> /dev/null; then
-        COMPOSE_CMD="docker compose"
+        USE_DOCKER_COMPOSE_V2=true
+        echo -e "${GREEN}Docker Compose V2 已就绪${NC}"
     elif command -v docker-compose &> /dev/null; then
-        COMPOSE_CMD="docker-compose"
+        USE_DOCKER_COMPOSE_V2=false
+        echo -e "${GREEN}Docker Compose V1 已就绪${NC}"
     else
         echo -e "${RED}Docker Compose 未安装${NC}"
         return 1
     fi
-    echo -e "${GREEN}使用命令: ${COMPOSE_CMD}${NC}"
+}
+
+# 执行 compose 命令的函数
+run_compose() {
+    if [ "$USE_DOCKER_COMPOSE_V2" = true ]; then
+        docker compose "$@"
+    else
+        docker-compose "$@"
+    fi
 }
 
 # 检查 Docker 是否安装
@@ -205,8 +216,8 @@ echo -e "${GREEN}凭据已保存到 ${INSTALL_DIR}/.credentials${NC}"
 
 # 拉取镜像并启动
 echo -e "${YELLOW}[6/7] 拉取镜像并启动服务...${NC}"
-${COMPOSE_CMD} pull
-${COMPOSE_CMD} up -d
+run_compose pull
+run_compose up -d
 
 # 等待服务启动
 echo -e "${YELLOW}等待服务启动...${NC}"
@@ -214,7 +225,7 @@ sleep 10
 
 # 检查服务状态
 echo -e "${YELLOW}[7/7] 检查服务状态...${NC}"
-if ${COMPOSE_CMD} ps | grep -q "Up\|running"; then
+if run_compose ps | grep -q "Up\|running"; then
     echo -e "${GREEN}"
     echo "========================================"
     echo "   安装完成!"
@@ -229,13 +240,13 @@ if ${COMPOSE_CMD} ps | grep -q "Up\|running"; then
     echo -e "${RED}重要: 请立即登录并修改默认密码!${NC}"
     echo ""
     echo "常用命令:"
-    echo "  查看状态: cd ${INSTALL_DIR} && ${COMPOSE_CMD} ps"
-    echo "  查看日志: cd ${INSTALL_DIR} && ${COMPOSE_CMD} logs -f"
-    echo "  重启服务: cd ${INSTALL_DIR} && ${COMPOSE_CMD} restart"
-    echo "  停止服务: cd ${INSTALL_DIR} && ${COMPOSE_CMD} down"
+    echo "  查看状态: cd ${INSTALL_DIR} && docker compose ps"
+    echo "  查看日志: cd ${INSTALL_DIR} && docker compose logs -f"
+    echo "  重启服务: cd ${INSTALL_DIR} && docker compose restart"
+    echo "  停止服务: cd ${INSTALL_DIR} && docker compose down"
     echo ""
 else
     echo -e "${RED}服务启动失败，请检查日志:${NC}"
-    ${COMPOSE_CMD} logs
+    run_compose logs
     exit 1
 fi
