@@ -1171,3 +1171,490 @@ html.dark .semi-input-textarea-wrapper:focus-within {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ==================== 组件风格统一系统 ==================== */
+/*
+ * 设计原则：
+ * - 统一圆角: 小组件 10px, 大容器 16px
+ * - 统一阴影: 柔和层次感
+ * - 统一间距: 基于 4px 网格
+ * - 扁平化: 减少边框，使用背景色区分
+ */
+
+/* ---------- Modal 统一样式 ---------- */
+.semi-modal-content {
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.12),
+    0 8px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.dark .semi-modal-content {
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.semi-modal-header {
+  padding: 20px 24px 16px !important;
+  border-bottom: 1px solid var(--semi-color-border);
+  background: var(--semi-color-bg-0);
+}
+
+.semi-modal-body {
+  padding: 20px 24px !important;
+  background: var(--semi-color-bg-0);
+}
+
+.semi-modal-footer {
+  padding: 16px 24px 20px !important;
+  border-top: 1px solid var(--semi-color-border);
+  background: var(--semi-color-bg-0);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.semi-modal-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: var(--semi-color-text-0);
+}
+
+/* Modal 关闭按钮 */
+.semi-modal-close {
+  top: 16px !important;
+  right: 16px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  transition: background-color 150ms ease-out !important;
+}
+
+.semi-modal-close:hover {
+  background-color: var(--semi-color-fill-1) !important;
+}
+
+/* ---------- SideSheet 统一样式 ---------- */
+.semi-sidesheet {
+  border-radius: 16px 0 0 16px !important;
+  overflow: hidden;
+}
+
+.semi-sidesheet-inner {
+  box-shadow:
+    -8px 0 24px rgba(0, 0, 0, 0.08),
+    -2px 0 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.dark .semi-sidesheet-inner {
+  box-shadow:
+    -8px 0 24px rgba(0, 0, 0, 0.3),
+    -2px 0 8px rgba(0, 0, 0, 0.2) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.semi-sidesheet-header {
+  padding: 20px 24px 16px !important;
+  border-bottom: 1px solid var(--semi-color-border);
+  background: var(--semi-color-bg-0);
+}
+
+.semi-sidesheet-body {
+  padding: 20px 24px !important;
+  background: var(--semi-color-bg-0);
+}
+
+.semi-sidesheet-footer {
+  padding: 16px 24px 20px !important;
+  border-top: 1px solid var(--semi-color-border);
+  background: var(--semi-color-bg-0);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.semi-sidesheet-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: var(--semi-color-text-0);
+}
+
+/* SideSheet 关闭按钮 */
+.semi-sidesheet-close {
+  top: 16px !important;
+  right: 16px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  transition: background-color 150ms ease-out !important;
+}
+
+.semi-sidesheet-close:hover {
+  background-color: var(--semi-color-fill-1) !important;
+}
+
+/* ---------- 表格统一样式 ---------- */
+.semi-table {
+  border-radius: 12px !important;
+  overflow: hidden;
+  border: 1px solid var(--semi-color-border);
+}
+
+.semi-table-thead {
+  background: var(--semi-color-fill-0) !important;
+}
+
+html.dark .semi-table-thead {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+.semi-table-thead > .semi-table-row > .semi-table-row-head {
+  font-weight: 600 !important;
+  color: var(--semi-color-text-0) !important;
+  padding: 14px 16px !important;
+  border-bottom: 1px solid var(--semi-color-border);
+  background: transparent !important;
+}
+
+.semi-table-tbody > .semi-table-row > .semi-table-row-cell {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid rgba(var(--semi-grey-2), 0.1);
+}
+
+/* 表格最后一行无边框 */
+.semi-table-tbody > .semi-table-row:last-child > .semi-table-row-cell {
+  border-bottom: none;
+}
+
+/* 表格空状态 */
+.semi-table-empty {
+  padding: 40px 20px !important;
+}
+
+/* ---------- 表单统一样式 ---------- */
+.semi-form {
+  --form-label-width: 120px;
+}
+
+.semi-form-field {
+  margin-bottom: 16px !important;
+}
+
+.semi-form-field-label {
+  font-weight: 500 !important;
+  color: var(--semi-color-text-0) !important;
+  margin-bottom: 8px !important;
+}
+
+.semi-form-field-label-text {
+  font-size: 14px !important;
+}
+
+/* 表单必填星号 */
+.semi-form-field-label-required::before {
+  color: var(--semi-color-danger) !important;
+  margin-right: 4px;
+}
+
+/* 表单帮助文本 */
+.semi-form-field-extra,
+.semi-form-field-help-text {
+  font-size: 12px !important;
+  color: var(--semi-color-text-2) !important;
+  margin-top: 6px !important;
+}
+
+/* 表单错误状态 */
+.semi-form-field-error-message {
+  font-size: 12px !important;
+  color: var(--semi-color-danger) !important;
+  margin-top: 6px !important;
+}
+
+/* ---------- Tabs 统一样式 ---------- */
+.semi-tabs-bar {
+  border-bottom: 1px solid var(--semi-color-border) !important;
+  padding: 0 4px !important;
+}
+
+.semi-tabs-tab {
+  padding: 12px 16px !important;
+  font-weight: 500 !important;
+  color: var(--semi-color-text-1) !important;
+  transition:
+    color 150ms ease-out,
+    background-color 150ms ease-out !important;
+}
+
+.semi-tabs-tab:hover {
+  color: var(--semi-color-primary) !important;
+  background-color: rgba(var(--semi-blue-0), 0.04) !important;
+}
+
+.semi-tabs-tab-active {
+  color: var(--semi-color-primary) !important;
+  font-weight: 600 !important;
+}
+
+.semi-tabs-ink-bar {
+  height: 3px !important;
+  border-radius: 3px 3px 0 0 !important;
+  background: var(--semi-color-primary) !important;
+}
+
+/* 卡片式 Tabs */
+.semi-tabs-tab-button {
+  border-radius: 10px !important;
+  margin: 0 4px !important;
+  padding: 8px 16px !important;
+}
+
+.semi-tabs-tab-button.semi-tabs-tab-active {
+  background: var(--semi-color-primary-light-default) !important;
+  color: var(--semi-color-primary) !important;
+}
+
+/* ---------- 下拉选择器统一样式 ---------- */
+.semi-select-selection {
+  min-height: 36px !important;
+  padding: 4px 12px !important;
+}
+
+.semi-select-option-list {
+  padding: 6px !important;
+  border-radius: 12px !important;
+}
+
+.semi-select-option {
+  border-radius: 8px !important;
+  padding: 10px 12px !important;
+  margin: 2px 0 !important;
+}
+
+/* ---------- 分页器统一样式 ---------- */
+.semi-page {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.semi-page-item {
+  min-width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  font-weight: 500 !important;
+  transition:
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    transform 150ms ease-out !important;
+}
+
+.semi-page-item:hover:not(.semi-page-item-disabled):not(.semi-page-item-active) {
+  background-color: var(--semi-color-fill-1) !important;
+  transform: scale(1.05);
+}
+
+.semi-page-item-active {
+  background: var(--semi-color-primary) !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+/* ---------- 通知/Toast 统一样式 ---------- */
+.semi-toast-wrapper {
+  border-radius: 12px !important;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  padding: 14px 18px !important;
+}
+
+html.dark .semi-toast-wrapper {
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.semi-notification-notice {
+  border-radius: 12px !important;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  padding: 16px 20px !important;
+}
+
+html.dark .semi-notification-notice {
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ---------- Popover/Dropdown 统一样式 ---------- */
+.semi-popover-wrapper {
+  border-radius: 12px !important;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  overflow: hidden;
+}
+
+html.dark .semi-popover-wrapper {
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.semi-dropdown-menu {
+  padding: 6px !important;
+  border-radius: 12px !important;
+}
+
+.semi-dropdown-item {
+  border-radius: 8px !important;
+  padding: 10px 12px !important;
+  margin: 2px 0 !important;
+  transition: background-color 100ms ease-out !important;
+}
+
+.semi-dropdown-item:hover {
+  background-color: rgba(var(--semi-blue-0), 0.06) !important;
+}
+
+/* ---------- 开关/Switch 统一样式 ---------- */
+.semi-switch {
+  border-radius: 20px !important;
+  transition:
+    background-color 200ms ease-out,
+    box-shadow 200ms ease-out !important;
+}
+
+.semi-switch-checked {
+  box-shadow: 0 2px 8px rgba(var(--semi-blue-5), 0.3) !important;
+}
+
+.semi-switch-knob {
+  border-radius: 50% !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ---------- 复选框/单选框 统一样式 ---------- */
+.semi-checkbox-inner {
+  border-radius: 6px !important;
+  transition:
+    background-color 150ms ease-out,
+    border-color 150ms ease-out,
+    box-shadow 150ms ease-out !important;
+}
+
+.semi-checkbox-checked .semi-checkbox-inner {
+  box-shadow: 0 2px 6px rgba(var(--semi-blue-5), 0.25) !important;
+}
+
+.semi-radio-inner {
+  transition:
+    background-color 150ms ease-out,
+    border-color 150ms ease-out,
+    box-shadow 150ms ease-out !important;
+}
+
+.semi-radio-checked .semi-radio-inner {
+  box-shadow: 0 2px 6px rgba(var(--semi-blue-5), 0.25) !important;
+}
+
+/* ---------- 进度条统一样式 ---------- */
+.semi-progress-track {
+  border-radius: 10px !important;
+  background: var(--semi-color-fill-1) !important;
+}
+
+.semi-progress-bar {
+  border-radius: 10px !important;
+  transition: width 300ms ease-out !important;
+}
+
+/* ---------- 徽章/Badge 统一样式 ---------- */
+.semi-badge-dot {
+  box-shadow: 0 0 0 2px var(--semi-color-bg-0) !important;
+}
+
+.semi-badge-count {
+  border-radius: 10px !important;
+  box-shadow: 0 0 0 2px var(--semi-color-bg-0) !important;
+  font-weight: 600 !important;
+}
+
+/* ---------- 头像/Avatar 统一样式 ---------- */
+.semi-avatar {
+  transition:
+    transform 150ms ease-out,
+    box-shadow 150ms ease-out !important;
+}
+
+.semi-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 头像组 */
+.semi-avatar-group .semi-avatar {
+  border: 2px solid var(--semi-color-bg-0) !important;
+}
+
+/* ---------- 空状态统一样式 ---------- */
+.semi-empty {
+  padding: 40px 20px !important;
+}
+
+.semi-empty-image {
+  margin-bottom: 16px !important;
+}
+
+.semi-empty-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--semi-color-text-0) !important;
+  margin-bottom: 8px !important;
+}
+
+.semi-empty-description {
+  font-size: 14px !important;
+  color: var(--semi-color-text-2) !important;
+}
+
+/* ---------- 面包屑统一样式 ---------- */
+.semi-breadcrumb-item {
+  transition: color 150ms ease-out !important;
+}
+
+.semi-breadcrumb-item:hover {
+  color: var(--semi-color-primary) !important;
+}
+
+.semi-breadcrumb-item-active {
+  font-weight: 600 !important;
+  color: var(--semi-color-text-0) !important;
+}
+
+/* ---------- 时间线统一样式 ---------- */
+.semi-timeline-item-dot {
+  box-shadow: 0 0 0 3px var(--semi-color-bg-0) !important;
+}
+
+/* ---------- 步骤条统一样式 ---------- */
+.semi-steps-item-icon {
+  transition:
+    background-color 200ms ease-out,
+    border-color 200ms ease-out,
+    box-shadow 200ms ease-out !important;
+}
+
+.semi-steps-item-finish .semi-steps-item-icon,
+.semi-steps-item-process .semi-steps-item-icon {
+  box-shadow: 0 2px 8px rgba(var(--semi-blue-5), 0.25) !important;
+}
