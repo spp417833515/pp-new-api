@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Card, Table, Input, Modal, Tabs, Tag, Switch, Select, Avatar, Progress } from '@douyinfe/semi-ui';
-import { IconSearch, IconSetting, IconUser, IconHome, IconStar, IconHeart, IconPlus, IconDelete, IconEdit } from '@douyinfe/semi-icons';
+import { IconSearch, IconSetting, IconUser, IconHome, IconStar, IconHeartStroked, IconPlus, IconDelete, IconEdit } from '@douyinfe/semi-icons';
 import './styles.css';
 
 const StylePreview = () => {
@@ -94,7 +94,7 @@ const StylePreview = () => {
                 <IconStar /> <span>渠道</span>
               </div>
               <div className="menu-item">
-                <IconHeart /> <span>令牌</span>
+                <IconHeartStroked /> <span>令牌</span>
               </div>
             </nav>
           </aside>
