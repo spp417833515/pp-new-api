@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone:*)",
+      "Bash(dir:*)",
+      "Bash(go version:*)",
+      "Bash(winget install:*)",
+      "Bash(curl:*)",
+      "Bash(cmd.exe /c \"go version\")",
+      "Bash(powershell -Command \"go version\")",
+      "Bash(export PATH=\"$PATH:/c/Program Files/Go/bin:/c/Go/bin\")",
+      "Bash(export PATH=\"$PATH:/d/Apps/Go/bin\")",
+      "Bash(npm install)",
+      "Bash(go mod download:*)",
+      "Bash(npm install --legacy-peer-deps)",
+      "Bash(go build:*)",
+      "Bash(npm run build)",
+      "Bash(npm install @douyinfe/vite-plugin-semi@2.63.0 --legacy-peer-deps)",
+      "Bash(npm view @douyinfe/vite-plugin-semi versions --json)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev)",
+      "Bash(timeout:*)",
+      "Bash(netstat:*)",
+      "Bash(./new-api.exe:*)",
+      "Bash(taskkill:*)",
+      "mcp__ppdocs-kg__kg_list_projects",
+      "WebSearch",
+      "Bash(ls -la \"D:\\\\Admin\\\\Desktop\\\\kiroRS\"\" 2>/dev/null || ls -la \"D:AdminDesktop\"\")",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(powershell:*)",
+      "Bash(findstr:*)",
+      "Bash(ls:*)",
+      "Bash(D:\\\\Apps\\\\Go\\\\bin\\\\go build:*)",
+      "Bash(/d/Apps/Go/bin/go build:*)",
+      "Bash(go run:*)"
+    ]
+  }
+}

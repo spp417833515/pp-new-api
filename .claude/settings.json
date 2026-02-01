@@ -1,0 +1,37 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/hook.py"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "mcp__ppdocs-kg__kg_create_node",
+      "mcp__ppdocs-kg__kg_delete_node",
+      "mcp__ppdocs-kg__kg_update_node",
+      "mcp__ppdocs-kg__kg_update_root",
+      "mcp__ppdocs-kg__kg_get_rules",
+      "mcp__ppdocs-kg__kg_save_rules",
+      "mcp__ppdocs-kg__kg_lock_node",
+      "mcp__ppdocs-kg__kg_search",
+      "mcp__ppdocs-kg__kg_find_path",
+      "mcp__ppdocs-kg__kg_list_nodes",
+      "mcp__ppdocs-kg__kg_get_relations",
+      "mcp__ppdocs-kg__kg_read_node",
+      "mcp__ppdocs-kg__kg_get_tree",
+      "mcp__ppdocs-kg__kg_find_by_file",
+      "mcp__ppdocs-kg__task_create",
+      "mcp__ppdocs-kg__task_list",
+      "mcp__ppdocs-kg__task_get",
+      "mcp__ppdocs-kg__task_add_log",
+      "mcp__ppdocs-kg__task_complete"
+    ]
+  }
+}
