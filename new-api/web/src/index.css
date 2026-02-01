@@ -179,6 +179,21 @@ code {
   border-color: var(--theme-accent) !important;
 }
 
+/* 顶栏导航分隔线 - 渐变透明效果 */
+.header-nav-separator {
+  width: 1px;
+  height: 20px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 30%,
+    rgba(255, 255, 255, 0.3) 70%,
+    transparent 100%
+  );
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
 /* ==================== 侧边栏样式 ==================== */
 .semi-navigation-item {
   margin-bottom: var(--theme-spacing-xs) !important;
@@ -491,6 +506,134 @@ code {
 
 .semi-card-footer {
   border-top: 1px solid var(--theme-glass-border) !important;
+}
+
+/* ==================== Steps 步骤条样式 ==================== */
+.semi-steps {
+  background: transparent !important;
+}
+
+.semi-steps .semi-steps-item-title {
+  color: var(--theme-text-secondary) !important;
+}
+
+.semi-steps .semi-steps-item-description {
+  color: var(--theme-text-muted) !important;
+}
+
+.semi-steps .semi-steps-item-process .semi-steps-item-title,
+.semi-steps .semi-steps-item-finish .semi-steps-item-title {
+  color: var(--theme-text-primary) !important;
+}
+
+.semi-steps .semi-steps-item-icon {
+  background: var(--theme-glass-bg) !important;
+  border-color: var(--theme-glass-border) !important;
+  color: var(--theme-text-secondary) !important;
+}
+
+.semi-steps .semi-steps-item-process .semi-steps-item-icon {
+  background: var(--theme-accent-gradient) !important;
+  border-color: var(--theme-accent) !important;
+  color: var(--theme-text-inverse) !important;
+}
+
+.semi-steps .semi-steps-item-finish .semi-steps-item-icon {
+  background: var(--theme-success-bg) !important;
+  border-color: var(--theme-success) !important;
+  color: var(--theme-success) !important;
+}
+
+.semi-steps .semi-steps-item-tail {
+  background: var(--theme-glass-border) !important;
+}
+
+.semi-steps .semi-steps-item-finish .semi-steps-item-tail {
+  background: var(--theme-success) !important;
+}
+
+/* ==================== Descriptions 描述列表样式 ==================== */
+.semi-descriptions {
+  background: var(--theme-glass-bg) !important;
+  border-radius: var(--theme-radius-md) !important;
+  border: 1px solid var(--theme-glass-border) !important;
+}
+
+.semi-descriptions-item {
+  border-bottom: 1px solid var(--theme-glass-border) !important;
+}
+
+.semi-descriptions-item:last-child {
+  border-bottom: none !important;
+}
+
+.semi-descriptions-key {
+  color: var(--theme-text-secondary) !important;
+  background: transparent !important;
+}
+
+.semi-descriptions-value {
+  color: var(--theme-text-primary) !important;
+  background: transparent !important;
+}
+
+/* ==================== RadioGroup Card 样式 ==================== */
+.semi-radio-cardRadioGroup .semi-radio-addon {
+  background: var(--theme-glass-bg) !important;
+  border: 1px solid var(--theme-glass-border) !important;
+  border-radius: var(--theme-radius-md) !important;
+  transition: border-color var(--theme-transition-fast), box-shadow var(--theme-transition-fast) !important;
+}
+
+.semi-radio-cardRadioGroup .semi-radio-addon:hover {
+  border-color: var(--theme-hover-border) !important;
+}
+
+.semi-radio-cardRadioGroup .semi-radio-addon-checked,
+.semi-radio-cardRadioGroup .semi-radio-checked .semi-radio-addon {
+  border-color: var(--theme-accent) !important;
+  box-shadow: var(--theme-focus-shadow) !important;
+}
+
+.semi-radio-cardRadioGroup .semi-radio-addon-content {
+  color: var(--theme-text-primary) !important;
+}
+
+.semi-radio-cardRadioGroup .semi-radio-addon-extra {
+  color: var(--theme-text-secondary) !important;
+}
+
+/* ==================== Banner 横幅样式 ==================== */
+.semi-banner {
+  border-radius: var(--theme-radius-md) !important;
+}
+
+.semi-banner-info {
+  background: var(--theme-info-bg) !important;
+  border-color: var(--theme-info-border) !important;
+}
+
+.semi-banner-warning {
+  background: var(--theme-warning-bg) !important;
+  border-color: var(--theme-warning-border) !important;
+}
+
+.semi-banner-success {
+  background: var(--theme-success-bg) !important;
+  border-color: var(--theme-success-border) !important;
+}
+
+.semi-banner-danger {
+  background: var(--theme-danger-bg) !important;
+  border-color: var(--theme-danger-border) !important;
+}
+
+.semi-banner-title {
+  color: var(--theme-text-primary) !important;
+}
+
+.semi-banner-content {
+  color: var(--theme-text-secondary) !important;
 }
 
 /* ==================== 统计卡片样式 ==================== */

@@ -19,8 +19,8 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React, { useEffect, useState } from 'react';
 import { Spin, Tabs, TabPane } from '@douyinfe/semi-ui';
-import { Trash2, Link2, ShieldAlert } from 'lucide-react';
-import SettingsLogAutoClean from '../../pages/Setting/Custom/SettingsLogAutoClean';
+import { FileText, Link2, ShieldAlert } from 'lucide-react';
+import SettingsLogManagement from '../../pages/Setting/Custom/SettingsLogManagement';
 import SettingsChannelAffinity from '../../pages/Setting/Operation/SettingsChannelAffinity';
 import SettingsSensitiveWords from '../../pages/Setting/Operation/SettingsSensitiveWords';
 import { API, showError, toBoolean } from '../../helpers';
@@ -29,6 +29,8 @@ import { useTranslation } from 'react-i18next';
 const CustomFeatureSetting = () => {
   const { t } = useTranslation();
   let [inputs, setInputs] = useState({
+    /* 日志记录 */
+    LogConsumeEnabled: false,
     /* 日志自动清理 */
     LogAutoCleanEnabled: false,
     LogMaxCount: 100000,
@@ -47,7 +49,7 @@ const CustomFeatureSetting = () => {
   });
 
   let [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('log-clean');
+  const [activeTab, setActiveTab] = useState('log-management');
 
   const getOptions = async () => {
     const res = await API.get('/api/option/');
@@ -89,12 +91,12 @@ const CustomFeatureSetting = () => {
     {
       tab: (
         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Trash2 size={16} />
-          {t('日志清理')}
+          <FileText size={16} />
+          {t('日志管理')}
         </span>
       ),
-      itemKey: 'log-clean',
-      content: <SettingsLogAutoClean options={inputs} refresh={onRefresh} />,
+      itemKey: 'log-management',
+      content: <SettingsLogManagement options={inputs} refresh={onRefresh} />,
     },
     {
       tab: (

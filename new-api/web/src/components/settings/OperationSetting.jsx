@@ -22,7 +22,6 @@ import { Card, Spin } from '@douyinfe/semi-ui';
 import SettingsGeneral from '../../pages/Setting/Operation/SettingsGeneral';
 import SettingsHeaderNavModules from '../../pages/Setting/Operation/SettingsHeaderNavModules';
 import SettingsSidebarModulesAdmin from '../../pages/Setting/Operation/SettingsSidebarModulesAdmin';
-import SettingsLog from '../../pages/Setting/Operation/SettingsLog';
 import SettingsMonitoring from '../../pages/Setting/Operation/SettingsMonitoring';
 import SettingsCreditLimit from '../../pages/Setting/Operation/SettingsCreditLimit';
 import SettingsCheckin from '../../pages/Setting/Operation/SettingsCheckin';
@@ -54,9 +53,6 @@ const OperationSetting = () => {
 
     /* 左侧边栏模块管理（管理员） */
     SidebarModulesAdmin: '',
-
-    /* 日志设置 */
-    LogConsumeEnabled: false,
 
     /* 监控设置 */
     ChannelDisableThreshold: 0,
@@ -126,10 +122,6 @@ const OperationSetting = () => {
         <div style={{ marginTop: '10px' }}>
           <SettingsSidebarModulesAdmin options={inputs} refresh={onRefresh} />
         </div>
-        {/* 日志设置 */}
-        <Card style={{ marginTop: '10px' }}>
-          <SettingsLog options={inputs} refresh={onRefresh} />
-        </Card>
         {/* 监控设置 */}
         <Card style={{ marginTop: '10px' }}>
           <SettingsMonitoring options={inputs} refresh={onRefresh} />

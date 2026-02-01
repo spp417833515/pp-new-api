@@ -36,11 +36,20 @@ const Navigation = ({
 
     const commonLinkClasses = `${baseClasses} ${spacingClasses} ${hoverClasses}`;
 
-    return mainNavLinks.map((link) => {
+    const elements = [];
+
+    mainNavLinks.forEach((link, index) => {
+      // Add separator before each item except the first
+      if (index > 0) {
+        elements.push(
+          <div key={`sep-${index}`} className="header-nav-separator" />
+        );
+      }
+
       const linkContent = <span>{link.text}</span>;
 
       if (link.isExternal) {
-        return (
+        elements.push(
           <a
             key={link.itemKey}
             href={link.externalLink}
@@ -51,6 +60,7 @@ const Navigation = ({
             {linkContent}
           </a>
         );
+        return;
       }
 
       let targetPath = link.to;
@@ -61,12 +71,14 @@ const Navigation = ({
         targetPath = '/login';
       }
 
-      return (
+      elements.push(
         <Link key={link.itemKey} to={targetPath} className={commonLinkClasses}>
           {linkContent}
         </Link>
       );
     });
+
+    return elements;
   };
 
   return (
