@@ -163,7 +163,7 @@ services:
       - redis
       - postgres
     healthcheck:
-      test: ["CMD-SHELL", "wget -q -O - http://localhost:3000/api/status | grep -o '\"success\":\\s*true' || exit 1"]
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:3000/api/status | grep -q success || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
