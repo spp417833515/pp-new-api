@@ -780,9 +780,56 @@ th[style*="sticky"],
 
 /* ==================== Tag 样式 ==================== */
 .semi-tag {
-  border-radius: var(--theme-radius-xs) !important;
-  border: 1px solid currentColor !important;
-  background: transparent !important;
+  border-radius: var(--theme-radius-sm) !important;
+  border: none !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--theme-text-primary) !important;
+  padding: 2px 10px !important;
+}
+
+/* Tag 颜色变体 - 半透明背景 */
+.semi-tag-blue,
+.semi-tag-light-blue {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: #60a5fa !important;
+}
+
+.semi-tag-green,
+.semi-tag-light-green {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+}
+
+.semi-tag-yellow,
+.semi-tag-orange,
+.semi-tag-light-yellow {
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #fbbf24 !important;
+}
+
+.semi-tag-red,
+.semi-tag-light-red {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+}
+
+.semi-tag-purple,
+.semi-tag-violet,
+.semi-tag-light-purple {
+  background: rgba(139, 92, 246, 0.15) !important;
+  color: #a78bfa !important;
+}
+
+.semi-tag-cyan,
+.semi-tag-light-cyan {
+  background: rgba(6, 182, 212, 0.15) !important;
+  color: #22d3ee !important;
+}
+
+.semi-tag-grey,
+.semi-tag-white {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--theme-text-secondary) !important;
 }
 
 /* ==================== Toast/Notification 样式 ==================== */
