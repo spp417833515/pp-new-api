@@ -862,3 +862,312 @@ html.dark .with-pastel-balls::before {
 .semi-datepicker-range-input {
   border-radius: 10px !important;
 }
+
+/* ==================== Apple风格动效系统 ==================== */
+/*
+ * 设计原则：
+ * - 微妙而不突兀的交互反馈
+ * - 统一的过渡时间 (150ms-300ms)
+ * - 柔和的缓动函数 (ease-out)
+ */
+
+/* ---------- 按钮悬停动效 ---------- */
+.semi-button {
+  transition:
+    transform 150ms ease-out,
+    box-shadow 150ms ease-out,
+    background-color 150ms ease-out,
+    border-color 150ms ease-out !important;
+}
+
+.semi-button:hover:not(:disabled):not(.semi-button-disabled) {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.semi-button:active:not(:disabled):not(.semi-button-disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 主要按钮特殊效果 */
+.semi-button-primary:hover:not(:disabled) {
+  box-shadow: 0 4px 14px rgba(var(--semi-blue-5), 0.35);
+}
+
+/* 危险按钮特殊效果 */
+.semi-button-danger:hover:not(:disabled) {
+  box-shadow: 0 4px 14px rgba(var(--semi-red-5), 0.35);
+}
+
+/* 成功按钮特殊效果 */
+.semi-button-success:hover:not(:disabled) {
+  box-shadow: 0 4px 14px rgba(var(--semi-green-5), 0.35);
+}
+
+/* ---------- 卡片悬停动效 ---------- */
+.semi-card {
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out,
+    border-color 200ms ease-out !important;
+}
+
+.semi-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* 暗色模式卡片阴影 */
+html.dark .semi-card:hover {
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 禁用特定卡片的悬停效果（如表格内嵌卡片） */
+.semi-card.no-hover-effect,
+.semi-table .semi-card {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ---------- 表格行悬停动效 ---------- */
+.semi-table-row {
+  transition: background-color 150ms ease-out !important;
+}
+
+.semi-table-row:hover {
+  background-color: rgba(var(--semi-blue-0), 0.04) !important;
+}
+
+html.dark .semi-table-row:hover {
+  background-color: rgba(var(--semi-blue-0), 0.08) !important;
+}
+
+/* 表格行选中状态 */
+.semi-table-row-selected {
+  background-color: rgba(var(--semi-blue-5), 0.08) !important;
+}
+
+.semi-table-row-selected:hover {
+  background-color: rgba(var(--semi-blue-5), 0.12) !important;
+}
+
+/* ---------- 输入框聚焦动效 ---------- */
+.semi-input-wrapper,
+.semi-select,
+.semi-input-textarea-wrapper {
+  transition:
+    border-color 150ms ease-out,
+    box-shadow 150ms ease-out,
+    background-color 150ms ease-out !important;
+}
+
+.semi-input-wrapper:focus-within,
+.semi-select-focus,
+.semi-input-textarea-wrapper:focus-within {
+  box-shadow: 0 0 0 3px rgba(var(--semi-blue-5), 0.12);
+  border-color: var(--semi-color-primary) !important;
+}
+
+/* 暗色模式聚焦光晕 */
+html.dark .semi-input-wrapper:focus-within,
+html.dark .semi-select-focus,
+html.dark .semi-input-textarea-wrapper:focus-within {
+  box-shadow: 0 0 0 3px rgba(var(--semi-blue-5), 0.2);
+}
+
+/* ---------- 标签悬停动效 ---------- */
+.semi-tag {
+  transition:
+    transform 120ms ease-out,
+    box-shadow 120ms ease-out,
+    background-color 120ms ease-out !important;
+}
+
+.semi-tag:hover {
+  transform: scale(1.03);
+}
+
+.semi-tag-closable:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- 下拉菜单动效 ---------- */
+.semi-select-option {
+  transition: background-color 100ms ease-out !important;
+}
+
+.semi-select-option:hover {
+  background-color: rgba(var(--semi-blue-0), 0.06) !important;
+}
+
+.semi-select-option-selected {
+  background-color: rgba(var(--semi-blue-5), 0.1) !important;
+}
+
+/* ---------- Modal/弹窗动效 ---------- */
+.semi-modal-content {
+  animation: modal-enter 200ms ease-out;
+}
+
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ---------- 侧边抽屉动效增强 ---------- */
+.semi-sidesheet-inner {
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ---------- Tooltip/气泡动效 ---------- */
+.semi-tooltip-wrapper {
+  animation: tooltip-enter 150ms ease-out;
+}
+
+@keyframes tooltip-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- 页面切换淡入动效 ---------- */
+.page-transition-enter {
+  animation: page-enter 300ms ease-out;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 骨架屏加载动效 ---------- */
+.semi-skeleton-content {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ---------- 图标旋转动效（用于加载状态） ---------- */
+.icon-spin {
+  animation: icon-spin 1s linear infinite;
+}
+
+@keyframes icon-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- 呼吸灯效果（用于状态指示） ---------- */
+.status-pulse {
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+}
+
+/* 在线状态呼吸灯 */
+.status-online {
+  position: relative;
+}
+
+.status-online::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  animation: online-pulse 2s ease-out infinite;
+  opacity: 0;
+}
+
+@keyframes online-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* ---------- 列表项交错动画 ---------- */
+.stagger-item {
+  animation: stagger-enter 300ms ease-out backwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0ms; }
+.stagger-item:nth-child(2) { animation-delay: 50ms; }
+.stagger-item:nth-child(3) { animation-delay: 100ms; }
+.stagger-item:nth-child(4) { animation-delay: 150ms; }
+.stagger-item:nth-child(5) { animation-delay: 200ms; }
+.stagger-item:nth-child(6) { animation-delay: 250ms; }
+.stagger-item:nth-child(7) { animation-delay: 300ms; }
+.stagger-item:nth-child(8) { animation-delay: 350ms; }
+
+@keyframes stagger-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 减少动画偏好支持 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
