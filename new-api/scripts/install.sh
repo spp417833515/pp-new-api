@@ -1,8 +1,12 @@
 #!/bin/bash
 #
 # PP-New-API 一键安装脚本
-# 用法: curl -fsSL https://raw.githubusercontent.com/spp417833515/pp-new-api/master/new-api/scripts/install.sh | bash
-# 或者: wget -qO- https://raw.githubusercontent.com/spp417833515/pp-new-api/master/new-api/scripts/install.sh | bash
+#
+# 用法1 (交互式):
+#   bash <(curl -fsSL https://raw.githubusercontent.com/spp417833515/pp-new-api/master/new-api/scripts/install.sh)
+#
+# 用法2 (指定端口):
+#   PORT=3001 bash <(curl -fsSL https://raw.githubusercontent.com/spp417833515/pp-new-api/master/new-api/scripts/install.sh)
 #
 
 set -e
@@ -32,6 +36,19 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# 检测 docker compose 命令
+detect_compose_cmd() {
+    if docker compose version &> /dev/null; then
+        COMPOSE_CMD="docker compose"
+    elif command -v docker-compose &> /dev/null; then
+        COMPOSE_CMD="docker-compose"
+    else
+        echo -e "${RED}Docker Compose 未安装${NC}"
+        return 1
+    fi
+    echo -e "${GREEN}使用命令: ${COMPOSE_CMD}${NC}"
+}
+
 # 检查 Docker 是否安装
 echo -e "${YELLOW}[1/7] 检查 Docker 环境...${NC}"
 if ! command -v docker &> /dev/null; then
@@ -44,25 +61,38 @@ else
     echo -e "${GREEN}Docker 已安装: $(docker --version)${NC}"
 fi
 
-# 检查 Docker Compose 是否安装
-if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
-    echo -e "${RED}Docker Compose 未安装，正在安装...${NC}"
-    curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    chmod +x /usr/local/bin/docker-compose
-    echo -e "${GREEN}Docker Compose 安装完成${NC}"
-else
-    echo -e "${GREEN}Docker Compose 已安装${NC}"
+# 检测 compose 命令
+if ! detect_compose_cmd; then
+    echo -e "${RED}正在安装 Docker Compose 插件...${NC}"
+    apt-get update && apt-get install -y docker-compose-plugin 2>/dev/null || \
+    yum install -y docker-compose-plugin 2>/dev/null || \
+    curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+    detect_compose_cmd || exit 1
 fi
 
 # 端口配置
 echo -e "${YELLOW}[2/7] 配置服务端口...${NC}"
-read -p "请输入服务端口 (默认 3000): " INPUT_PORT
-PORT=${INPUT_PORT:-3000}
+if [ -n "$PORT" ]; then
+    # 从环境变量获取端口
+    echo -e "${GREEN}使用环境变量端口: ${PORT}${NC}"
+else
+    # 交互式输入
+    echo -n "请输入服务端口 (默认 3000): "
+    read -r INPUT_PORT </dev/tty 2>/dev/null || INPUT_PORT=""
+    PORT=${INPUT_PORT:-3000}
+fi
+
+# 验证端口是数字
+if ! [[ "$PORT" =~ ^[0-9]+$ ]]; then
+    echo -e "${RED}无效端口: ${PORT}，使用默认端口 3000${NC}"
+    PORT=3000
+fi
 
 # 检查端口是否被占用
 if netstat -tuln 2>/dev/null | grep -q ":${PORT} " || ss -tuln 2>/dev/null | grep -q ":${PORT} "; then
     echo -e "${RED}警告: 端口 ${PORT} 已被占用${NC}"
-    read -p "是否继续? (y/n): " confirm
+    echo -n "是否继续? (y/n): "
+    read -r confirm </dev/tty 2>/dev/null || confirm="y"
     if [ "$confirm" != "y" ]; then
         echo "已取消安装"
         exit 1
@@ -175,8 +205,8 @@ echo -e "${GREEN}凭据已保存到 ${INSTALL_DIR}/.credentials${NC}"
 
 # 拉取镜像并启动
 echo -e "${YELLOW}[6/7] 拉取镜像并启动服务...${NC}"
-docker-compose pull
-docker-compose up -d
+${COMPOSE_CMD} pull
+${COMPOSE_CMD} up -d
 
 # 等待服务启动
 echo -e "${YELLOW}等待服务启动...${NC}"
@@ -184,27 +214,28 @@ sleep 10
 
 # 检查服务状态
 echo -e "${YELLOW}[7/7] 检查服务状态...${NC}"
-if docker-compose ps | grep -q "Up"; then
+if ${COMPOSE_CMD} ps | grep -q "Up\|running"; then
     echo -e "${GREEN}"
     echo "========================================"
     echo "   安装完成!"
     echo "========================================"
     echo -e "${NC}"
     echo ""
-    echo -e "访问地址: ${BLUE}http://$(hostname -I | awk '{print $1}'):${PORT}${NC}"
+    SERVER_IP=$(hostname -I 2>/dev/null | awk '{print $1}' || curl -s ifconfig.me 2>/dev/null || echo "YOUR_SERVER_IP")
+    echo -e "访问地址: ${BLUE}http://${SERVER_IP}:${PORT}${NC}"
     echo -e "默认账号: ${YELLOW}root${NC}"
     echo -e "默认密码: ${YELLOW}123456${NC}"
     echo ""
     echo -e "${RED}重要: 请立即登录并修改默认密码!${NC}"
     echo ""
     echo "常用命令:"
-    echo "  查看状态: cd ${INSTALL_DIR} && docker-compose ps"
-    echo "  查看日志: cd ${INSTALL_DIR} && docker-compose logs -f"
-    echo "  重启服务: cd ${INSTALL_DIR} && docker-compose restart"
-    echo "  停止服务: cd ${INSTALL_DIR} && docker-compose down"
+    echo "  查看状态: cd ${INSTALL_DIR} && ${COMPOSE_CMD} ps"
+    echo "  查看日志: cd ${INSTALL_DIR} && ${COMPOSE_CMD} logs -f"
+    echo "  重启服务: cd ${INSTALL_DIR} && ${COMPOSE_CMD} restart"
+    echo "  停止服务: cd ${INSTALL_DIR} && ${COMPOSE_CMD} down"
     echo ""
 else
     echo -e "${RED}服务启动失败，请检查日志:${NC}"
-    docker-compose logs
+    ${COMPOSE_CMD} logs
     exit 1
 fi
