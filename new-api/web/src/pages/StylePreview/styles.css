@@ -1,0 +1,721 @@
+/* ==================== UI 风格预览页面 ==================== */
+
+.style-preview {
+  min-height: 100vh;
+  padding: 40px;
+  position: relative;
+  overflow-x: hidden;
+  transition: all 0.3s ease;
+}
+
+.style-bg-decoration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  transition: all 0.5s ease;
+}
+
+/* ==================== 头部 ==================== */
+.style-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.style-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.style-header p {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+/* ==================== 风格选择器 ==================== */
+.style-selector {
+  margin-bottom: 48px;
+}
+
+.style-selector h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.style-card {
+  padding: 24px;
+  border-radius: 16px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.style-card-indicator {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.2s ease;
+}
+
+.style-card.active .style-card-indicator {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.style-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.style-card p {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+/* ==================== 预览区域 ==================== */
+.style-preview-area h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.preview-layout {
+  display: flex;
+  gap: 24px;
+  min-height: 600px;
+}
+
+/* 模拟侧边栏 */
+.preview-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  padding: 20px 12px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menu-group-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 16px 12px 8px;
+  opacity: 0.5;
+  font-weight: 600;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 14px;
+}
+
+/* 主内容区 */
+.preview-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.preview-card {
+  transition: all 0.3s ease;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.table-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.misc-components {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.component-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.component-row > span:first-child {
+  width: 60px;
+  opacity: 0.7;
+}
+
+/* ==================== 底部 ==================== */
+.style-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.footer-info {
+  font-size: 14px;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* ==================== 风格1: Apple ==================== */
+.style-apple {
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.style-apple .style-bg-decoration {
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.03) 0%, rgba(88, 86, 214, 0.03) 100%);
+}
+
+.style-apple .style-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.style-apple .style-card:hover {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.style-apple .style-card.active {
+  border-color: #007AFF;
+  background: rgba(0, 122, 255, 0.05);
+}
+
+.style-apple .preview-sidebar {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.style-apple .menu-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.style-apple .menu-item.active {
+  background: rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+.style-apple .menu-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 18px;
+  background: #007AFF;
+  border-radius: 0 3px 3px 0;
+}
+
+.style-apple .preview-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* ==================== 风格2: Material ==================== */
+.style-material {
+  background: #fafafa;
+  color: #1e1e1e;
+}
+
+.style-material .style-bg-decoration {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+}
+
+.style-material .style-card {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+}
+
+.style-material .style-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.style-material .style-card.active {
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25);
+  border: 2px solid #6366f1;
+}
+
+.style-material .preview-sidebar {
+  background: #ffffff;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.06);
+  border-radius: 0 16px 16px 0;
+}
+
+.style-material .menu-item:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.style-material .menu-item.active {
+  background: rgba(99, 102, 241, 0.12);
+  color: #6366f1;
+  font-weight: 500;
+}
+
+.style-material .preview-card {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+}
+
+.style-material .preview-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== 风格3: Glassmorphism ==================== */
+.style-glass {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+.style-glass .style-header h1,
+.style-glass .style-selector h2,
+.style-glass .style-preview-area h2 {
+  color: #ffffff;
+}
+
+.style-glass .style-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.style-glass .style-card:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.style-glass .style-card.active {
+  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.style-glass .preview-sidebar {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.style-glass .menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.style-glass .menu-item.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-left: 3px solid #ffffff;
+}
+
+.style-glass .preview-card {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+.style-glass .semi-card-header,
+.style-glass .semi-card-body {
+  color: #ffffff;
+}
+
+/* ==================== 风格4: Neumorphism ==================== */
+.style-neumorphism {
+  background: #e0e5ec;
+  color: #44476a;
+}
+
+.style-neumorphism .style-card {
+  background: #e0e5ec;
+  box-shadow: 8px 8px 16px #b8bcc8, -8px -8px 16px #ffffff;
+  border: none;
+  border-radius: 20px;
+}
+
+.style-neumorphism .style-card:hover {
+  box-shadow: 10px 10px 20px #b8bcc8, -10px -10px 20px #ffffff;
+}
+
+.style-neumorphism .style-card.active {
+  box-shadow: inset 6px 6px 12px #b8bcc8, inset -6px -6px 12px #ffffff;
+}
+
+.style-neumorphism .preview-sidebar {
+  background: #e0e5ec;
+  box-shadow: 8px 8px 16px #b8bcc8, -8px -8px 16px #ffffff;
+  border-radius: 20px;
+}
+
+.style-neumorphism .menu-item {
+  border-radius: 12px;
+}
+
+.style-neumorphism .menu-item:hover {
+  box-shadow: 4px 4px 8px #b8bcc8, -4px -4px 8px #ffffff;
+}
+
+.style-neumorphism .menu-item.active {
+  box-shadow: inset 4px 4px 8px #b8bcc8, inset -4px -4px 8px #ffffff;
+  color: #6366f1;
+}
+
+.style-neumorphism .preview-card {
+  background: #e0e5ec !important;
+  box-shadow: 8px 8px 16px #b8bcc8, -8px -8px 16px #ffffff !important;
+  border: none !important;
+  border-radius: 20px !important;
+}
+
+/* ==================== 风格5: Minimal ==================== */
+.style-minimal {
+  background: #ffffff;
+  color: #171717;
+}
+
+.style-minimal .style-card {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+}
+
+.style-minimal .style-card:hover {
+  border-color: #171717;
+}
+
+.style-minimal .style-card.active {
+  border: 2px solid #171717;
+  background: #fafafa;
+}
+
+.style-minimal .preview-sidebar {
+  background: #fafafa;
+  border-right: 1px solid #e5e5e5;
+  border-radius: 0;
+}
+
+.style-minimal .menu-item {
+  border-radius: 0;
+}
+
+.style-minimal .menu-item:hover {
+  background: #f5f5f5;
+}
+
+.style-minimal .menu-item.active {
+  background: #171717;
+  color: #ffffff;
+}
+
+.style-minimal .preview-card {
+  background: #ffffff !important;
+  border: 1px solid #e5e5e5 !important;
+  box-shadow: none !important;
+  border-radius: 4px !important;
+}
+
+.style-minimal .semi-button-primary {
+  background: #171717 !important;
+  border-color: #171717 !important;
+  border-radius: 4px !important;
+}
+
+/* ==================== 风格6: Cyberpunk ==================== */
+.style-cyberpunk {
+  background: #0a0a0f;
+  color: #e0e0e0;
+}
+
+.style-cyberpunk .style-bg-decoration {
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+}
+
+.style-cyberpunk .style-header h1 {
+  background: linear-gradient(90deg, #f0abfc, #06b6d4, #f0abfc);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s linear infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.style-cyberpunk .style-card {
+  background: rgba(20, 20, 30, 0.8);
+  border: 1px solid rgba(240, 171, 252, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(240, 171, 252, 0.1);
+}
+
+.style-cyberpunk .style-card:hover {
+  border-color: rgba(240, 171, 252, 0.4);
+  box-shadow: 0 0 30px rgba(240, 171, 252, 0.2);
+}
+
+.style-cyberpunk .style-card.active {
+  border: 2px solid #f0abfc;
+  box-shadow: 0 0 40px rgba(240, 171, 252, 0.3), inset 0 0 20px rgba(240, 171, 252, 0.05);
+}
+
+.style-cyberpunk .preview-sidebar {
+  background: rgba(20, 20, 30, 0.9);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 8px;
+}
+
+.style-cyberpunk .menu-item:hover {
+  background: rgba(6, 182, 212, 0.1);
+  border-left: 2px solid #06b6d4;
+}
+
+.style-cyberpunk .menu-item.active {
+  background: rgba(240, 171, 252, 0.1);
+  border-left: 3px solid #f0abfc;
+  color: #f0abfc;
+  text-shadow: 0 0 10px rgba(240, 171, 252, 0.5);
+}
+
+.style-cyberpunk .preview-card {
+  background: rgba(20, 20, 30, 0.9) !important;
+  border: 1px solid rgba(6, 182, 212, 0.2) !important;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.1) !important;
+  border-radius: 8px !important;
+}
+
+.style-cyberpunk .semi-card-header {
+  border-bottom-color: rgba(6, 182, 212, 0.2) !important;
+}
+
+.style-cyberpunk .semi-button-primary {
+  background: linear-gradient(90deg, #f0abfc, #06b6d4) !important;
+  border: none !important;
+  box-shadow: 0 0 20px rgba(240, 171, 252, 0.3) !important;
+}
+
+.style-cyberpunk .semi-button-primary:hover {
+  box-shadow: 0 0 30px rgba(240, 171, 252, 0.5) !important;
+}
+
+.style-cyberpunk .semi-tag {
+  border: 1px solid currentColor !important;
+  background: transparent !important;
+}
+
+/* ==================== 暗色模式适配 ==================== */
+html.dark .style-apple {
+  background: #1c1c1e;
+  color: #f5f5f7;
+}
+
+html.dark .style-apple .style-card {
+  background: rgba(44, 44, 46, 0.8);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.dark .style-apple .style-card.active {
+  background: rgba(0, 122, 255, 0.15);
+  border-color: #0A84FF;
+}
+
+html.dark .style-apple .preview-sidebar {
+  background: rgba(44, 44, 46, 0.85);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.dark .style-apple .menu-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .style-apple .menu-item.active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .style-apple .menu-item.active::before {
+  background: #0A84FF;
+}
+
+html.dark .style-apple .preview-card {
+  background: #2c2c2e;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.dark .style-material {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+html.dark .style-material .style-card {
+  background: #1e1e1e;
+}
+
+html.dark .style-material .preview-sidebar {
+  background: #1e1e1e;
+}
+
+html.dark .style-material .preview-card {
+  background: #1e1e1e !important;
+}
+
+html.dark .style-neumorphism {
+  background: #2d2d3a;
+  color: #e0e0e0;
+}
+
+html.dark .style-neumorphism .style-card {
+  background: #2d2d3a;
+  box-shadow: 8px 8px 16px #1a1a24, -8px -8px 16px #404050;
+}
+
+html.dark .style-neumorphism .style-card.active {
+  box-shadow: inset 6px 6px 12px #1a1a24, inset -6px -6px 12px #404050;
+}
+
+html.dark .style-neumorphism .preview-sidebar {
+  background: #2d2d3a;
+  box-shadow: 8px 8px 16px #1a1a24, -8px -8px 16px #404050;
+}
+
+html.dark .style-neumorphism .preview-card {
+  background: #2d2d3a !important;
+  box-shadow: 8px 8px 16px #1a1a24, -8px -8px 16px #404050 !important;
+}
+
+html.dark .style-minimal {
+  background: #0a0a0a;
+  color: #e5e5e5;
+}
+
+html.dark .style-minimal .style-card {
+  background: #0a0a0a;
+  border-color: #262626;
+}
+
+html.dark .style-minimal .style-card:hover {
+  border-color: #e5e5e5;
+}
+
+html.dark .style-minimal .style-card.active {
+  border-color: #e5e5e5;
+  background: #171717;
+}
+
+html.dark .style-minimal .preview-sidebar {
+  background: #171717;
+  border-color: #262626;
+}
+
+html.dark .style-minimal .menu-item:hover {
+  background: #262626;
+}
+
+html.dark .style-minimal .menu-item.active {
+  background: #e5e5e5;
+  color: #0a0a0a;
+}
+
+html.dark .style-minimal .preview-card {
+  background: #171717 !important;
+  border-color: #262626 !important;
+}
+
+html.dark .style-minimal .semi-button-primary {
+  background: #e5e5e5 !important;
+  border-color: #e5e5e5 !important;
+  color: #0a0a0a !important;
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 768px) {
+  .style-preview {
+    padding: 20px;
+  }
+
+  .preview-layout {
+    flex-direction: column;
+  }
+
+  .preview-sidebar {
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  .style-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .style-footer {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
