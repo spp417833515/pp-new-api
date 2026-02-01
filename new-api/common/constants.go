@@ -17,6 +17,11 @@ var Footer = ""
 var Logo = ""
 var TopUpLink = ""
 
+// Docker 自动更新配置
+var DockerImage = "spp417833515/pp-new-api"    // Docker Hub 镜像地址
+var DockerContainerName = "pp-new-api"          // 容器名称前缀
+var UpdateCheckEnabled = true                   // 是否启用更新检查
+
 // var ChatLink = ""
 // var ChatLink2 = ""
 var QuotaPerUnit = 500 * 1000.0 // $0.002 / 1K tokens

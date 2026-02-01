@@ -1,5 +1,5 @@
 # New-API Docker Compose Configuration
-# 
+#
 # Quick Start:
 #   1. docker-compose up -d
 #   2. Access at http://localhost:3000
@@ -16,15 +16,18 @@ version: '3.4' # For compatibility with older Docker versions
 
 services:
   new-api:
-    image: calciumion/new-api:latest
-    container_name: new-api
-    restart: always
+    image: spp417833515/pp-new-api:latest
+    container_name: pp-new-api
+    restart: unless-stopped
     command: --log-dir /app/logs
     ports:
       - "3000:3000"
     volumes:
       - ./data:/data
       - ./logs:/app/logs
+      - app_bin:/app/bin          # 二进制文件 (支持热更新)
+      - app_public:/app/public    # 前端文件 (支持热更新)
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker Socket (用于自更新)
     environment:
       - SQL_DSN=postgresql://root:123456@postgres:5432/new-api # ⚠️ IMPORTANT: Change the password in production!
 #      - SQL_DSN=root:123456@tcp(mysql:3306)/new-api  # Point to the mysql service, uncomment if using MySQL
@@ -32,6 +35,8 @@ services:
       - TZ=Asia/Shanghai
       - ERROR_LOG_ENABLED=true # 是否启用错误日志记录 (Whether to enable error log recording)
       - BATCH_UPDATE_ENABLED=true  # 是否启用批量更新 (Whether to enable batch update)
+      - DOCKER_IMAGE=spp417833515/pp-new-api  # Docker 镜像名称 (用于自更新)
+      - DOCKER_CONTAINER=pp-new-api  # 容器名称 (用于自更新)
 #      - STREAMING_TIMEOUT=300  # 流模式无响应超时时间，单位秒，默认120秒，如果出现空补全可以尝试改为更大值 （Streaming timeout in seconds, default is 120s. Increase if experiencing empty completions）
 #      - SESSION_SECRET=random_string  # 多机部署时设置，必须修改这个随机字符串！！ （multi-node deployment, set this to a random string!!!!!!!）
 #      - SYNC_FREQUENCY=60  # Uncomment if regular database syncing is needed
@@ -81,4 +86,6 @@ services:
 
 volumes:
   pg_data:
+  app_bin:      # 二进制文件 Volume (支持热更新)
+  app_public:   # 前端文件 Volume (支持热更新)
 #  mysql_data:

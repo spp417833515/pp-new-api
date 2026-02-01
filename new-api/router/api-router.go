@@ -42,6 +42,9 @@ func SetApiRouter(router *gin.Engine) {
 		apiRouter.GET("/oauth/telegram/bind", middleware.CriticalRateLimit(), controller.TelegramBind)
 		apiRouter.GET("/ratio_config", middleware.CriticalRateLimit(), controller.GetRatioConfig)
 
+		// 版本更新检查 (公开接口)
+		apiRouter.GET("/version/check", controller.CheckUpdate)
+
 		apiRouter.POST("/stripe/webhook", controller.StripeWebhook)
 		apiRouter.POST("/creem/webhook", controller.CreemWebhook)
 
@@ -128,6 +131,13 @@ func SetApiRouter(router *gin.Engine) {
 			optionRoute.DELETE("/channel_affinity_cache", controller.ClearChannelAffinityCache)
 			optionRoute.POST("/rest_model_ratio", controller.ResetModelRatio)
 			optionRoute.POST("/migrate_console_setting", controller.MigrateConsoleSetting) // 用于迁移检测的旧键，下个版本会删除
+		}
+		// 系统更新路由 (仅管理员)
+		updateRoute := apiRouter.Group("/admin/update")
+		updateRoute.Use(middleware.RootAuth())
+		{
+			updateRoute.POST("/", controller.ExecuteUpdate)
+			updateRoute.POST("/rollback", controller.RollbackUpdate)
 		}
 		performanceRoute := apiRouter.Group("/performance")
 		performanceRoute.Use(middleware.RootAuth())

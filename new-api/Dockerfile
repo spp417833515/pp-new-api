@@ -28,11 +28,25 @@ RUN go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$
 FROM debian:bookworm-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates tzdata libasan8 wget \
+    && apt-get install -y --no-install-recommends ca-certificates tzdata libasan8 wget docker.io \
     && rm -rf /var/lib/apt/lists/* \
     && update-ca-certificates
 
-COPY --from=builder2 /build/new-api /
+# 创建应用目录结构
+RUN mkdir -p /app/bin /app/public /data
+
+# 复制二进制文件和前端文件
+COPY --from=builder2 /build/new-api /app/bin/new-api
+COPY --from=builder /build/dist /app/public
+COPY ./VERSION /app/VERSION
+
+# 创建启动脚本
+RUN echo '#!/bin/sh\nexec /app/bin/new-api "$@"' > /app/entrypoint.sh \
+    && chmod +x /app/entrypoint.sh /app/bin/new-api
+
+# 支持 --version 参数
+RUN echo '#!/bin/sh\nif [ "$1" = "--version" ]; then cat /app/VERSION; exit 0; fi\nexec /app/bin/new-api "$@"' > /app/entrypoint.sh
+
 EXPOSE 3000
 WORKDIR /data
-ENTRYPOINT ["/new-api"]
+ENTRYPOINT ["/app/entrypoint.sh"]

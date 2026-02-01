@@ -120,6 +120,16 @@ func InitEnv() {
 	CriticalRateLimitEnable = GetEnvOrDefaultBool("CRITICAL_RATE_LIMIT_ENABLE", true)
 	CriticalRateLimitNum = GetEnvOrDefault("CRITICAL_RATE_LIMIT", 20)
 	CriticalRateLimitDuration = int64(GetEnvOrDefault("CRITICAL_RATE_LIMIT_DURATION", 20*60))
+
+	// Docker 自动更新配置
+	if dockerImage := os.Getenv("DOCKER_IMAGE"); dockerImage != "" {
+		DockerImage = dockerImage
+	}
+	if dockerContainer := os.Getenv("DOCKER_CONTAINER"); dockerContainer != "" {
+		DockerContainerName = dockerContainer
+	}
+	UpdateCheckEnabled = GetEnvOrDefaultBool("UPDATE_CHECK_ENABLED", true)
+
 	initConstantEnv()
 }
 
