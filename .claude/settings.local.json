@@ -32,7 +32,11 @@
       "Bash(ls:*)",
       "Bash(D:\\\\Apps\\\\Go\\\\bin\\\\go build:*)",
       "Bash(/d/Apps/Go/bin/go build:*)",
-      "Bash(go run:*)"
+      "Bash(go run:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git stash:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }
