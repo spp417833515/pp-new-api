@@ -25,6 +25,7 @@ import {
   Row,
   Spin,
   Typography,
+  Divider,
 } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 import {
@@ -40,6 +41,7 @@ const { Text } = Typography;
 export default function SettingsLogAutoClean(props) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
+  const [cleanLoading, setCleanLoading] = useState(false);
   const [inputs, setInputs] = useState({
     LogAutoCleanEnabled: false,
     LogMaxCount: 100000,
@@ -84,6 +86,24 @@ export default function SettingsLogAutoClean(props) {
       .finally(() => {
         setLoading(false);
       });
+  }
+
+  // 手动清理日志
+  async function onCleanLogs() {
+    setCleanLoading(true);
+    try {
+      const res = await API.post('/api/log/clean');
+      const { success, message, data } = res.data;
+      if (success) {
+        showSuccess(t('已清理 {{count}} 条日志', { count: data.deleted }));
+      } else {
+        showError(message || t('清理失败'));
+      }
+    } catch (error) {
+      showError(t('清理失败，请重试'));
+    } finally {
+      setCleanLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -169,6 +189,29 @@ export default function SettingsLogAutoClean(props) {
               <Button size='default' onClick={onSubmit}>
                 {t('保存自动清理设置')}
               </Button>
+            </Row>
+          </Form.Section>
+
+          <Divider margin='12px' />
+
+          <Form.Section text={t('手动清理')}>
+            <Row gutter={16} style={{ alignItems: 'center' }}>
+              <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+                <Button
+                  type='warning'
+                  theme='solid'
+                  size='default'
+                  loading={cleanLoading}
+                  onClick={onCleanLogs}
+                >
+                  {t('立即清理日志')}
+                </Button>
+              </Col>
+              <Col xs={24} sm={12} md={16} lg={18} xl={18}>
+                <Text type='tertiary' size='small'>
+                  {t('立即执行一次日志清理，保留最新的 {{count}} 条记录', { count: inputs.LogMaxCount || 100000 })}
+                </Text>
+              </Col>
             </Row>
           </Form.Section>
         </Form>

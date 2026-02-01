@@ -167,3 +167,29 @@ func DeleteHistoryLogs(c *gin.Context) {
 	})
 	return
 }
+
+// CleanLogs 手动清理日志，保留最新的 LogMaxCount 条
+func CleanLogs(c *gin.Context) {
+	maxCount := common.LogMaxCount
+	if maxCount <= 0 {
+		maxCount = 100000
+	}
+
+	deleted, err := model.CleanLogByCount(maxCount)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "日志清理完成",
+		"data": gin.H{
+			"deleted":   deleted,
+			"max_count": maxCount,
+		},
+	})
+}
