@@ -1,3 +1,17 @@
+/*
+ * ============================================================
+ * NEW-API 全局样式
+ * ============================================================
+ *
+ * 主题: Glassmorphism 深空灰
+ * 所有颜色值引用 styles/theme/glassmorphism.css 中的变量
+ * 禁止在此文件中硬编码颜色值
+ * ============================================================
+ */
+
+/* ==================== 导入主题变量 ==================== */
+@import './styles/theme/glassmorphism.css';
+
 /* ==================== Tailwind CSS 配置 ==================== */
 @layer tailwind-base, semi, tailwind-components, tailwind-utils;
 
@@ -15,8 +29,8 @@
 
 /* ==================== 全局基础样式 ==================== */
 :root {
-  --sidebar-width: 180px;
-  --sidebar-width-collapsed: 60px;
+  --sidebar-width: var(--theme-sidebar-width);
+  --sidebar-width-collapsed: var(--theme-sidebar-collapsed);
   --sidebar-current-width: var(--sidebar-width);
 }
 
@@ -24,19 +38,23 @@ body.sidebar-collapsed {
   --sidebar-current-width: var(--sidebar-width-collapsed);
 }
 
+html, body {
+  background: var(--theme-bg-gradient);
+  min-height: 100vh;
+}
+
 body {
-  font-family: Lato, 'Helvetica Neue', Arial, Helvetica, 'Microsoft YaHei',
-    sans-serif;
-  color: var(--semi-color-text-0);
-  background-color: var(--semi-color-bg-0);
+  font-family: var(--theme-font-family);
+  color: var(--theme-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: var(--theme-font-mono);
 }
 
-/* ==================== 布局相关样式 ==================== */
+/* ==================== 滚动条隐藏 ==================== */
 .semi-layout::-webkit-scrollbar,
 .semi-layout-content::-webkit-scrollbar,
 .semi-sider::-webkit-scrollbar {
@@ -52,34 +70,35 @@ code {
   scrollbar-width: none;
 }
 
-/* ==================== 导航和侧边栏样式 (Apple扁平化科技风) ==================== */
-
-/* --- Apple 科技风配色变量 --- */
-:root {
-  --apple-sidebar-bg: rgba(255, 255, 255, 0.72);
-  --apple-sidebar-border: rgba(0, 0, 0, 0.06);
-  --apple-item-hover: rgba(0, 0, 0, 0.04);
-  --apple-item-selected: rgba(0, 0, 0, 0.06);
-  --apple-accent: #007AFF;
-  --apple-text-primary: #1d1d1f;
-  --apple-text-secondary: #86868b;
-  --apple-icon-color: #636366;
+/* ==================== 顶栏样式 ==================== */
+.header-bar {
+  position: sticky;
+  top: 0;
+  z-index: var(--theme-z-sticky);
+  background: var(--theme-glass-header-bg);
+  backdrop-filter: var(--theme-glass-blur);
+  -webkit-backdrop-filter: var(--theme-glass-blur);
+  border-bottom: 1px solid var(--theme-glass-header-border);
+  color: var(--theme-text-primary);
+  transition: background var(--theme-transition-normal), border-color var(--theme-transition-normal);
 }
 
-html.dark {
-  --apple-sidebar-bg: rgba(30, 30, 30, 0.85);
-  --apple-sidebar-border: rgba(255, 255, 255, 0.08);
-  --apple-item-hover: rgba(255, 255, 255, 0.06);
-  --apple-item-selected: rgba(255, 255, 255, 0.1);
-  --apple-accent: #0A84FF;
-  --apple-text-primary: #f5f5f7;
-  --apple-text-secondary: #98989d;
-  --apple-icon-color: #98989d;
+.header-bar .header-content {
+  width: 100%;
+  padding: 0 var(--theme-spacing-sm);
 }
 
+.header-bar .header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--theme-header-height);
+}
+
+/* ==================== 侧边栏样式 ==================== */
 .semi-navigation-item {
-  margin-bottom: 4px !important;
-  padding: 4px 12px !important;
+  margin-bottom: var(--theme-spacing-xs) !important;
+  padding: var(--theme-spacing-xs) var(--theme-spacing-sm) !important;
 }
 
 .semi-navigation-sub-title {
@@ -109,36 +128,18 @@ html.dark {
   height: 44px !important;
 }
 
-#root
-  > section
-  > header
-  > section
-  > div
-  > div
-  > div
-  > div.semi-navigation-header-list-outer
-  > div.semi-navigation-list-wrapper
-  > ul
-  > div
-  > a
-  > li
-  > span {
-  font-weight: 600 !important;
-}
-
-/* --- 侧边栏容器 (毛玻璃效果) --- */
+/* 侧边栏容器 (毛玻璃) */
 .sidebar-container {
   height: 100%;
   display: flex;
   flex-direction: column;
-  transition: width 0.3s ease;
-  background: var(--apple-sidebar-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-right: 1px solid var(--apple-sidebar-border);
+  transition: width var(--theme-transition-slow);
+  background: var(--theme-glass-sidebar-bg);
+  backdrop-filter: var(--theme-glass-blur);
+  -webkit-backdrop-filter: var(--theme-glass-blur);
+  border-right: 1px solid var(--theme-glass-sidebar-border);
 }
 
-/* --- 侧边栏导航区域 --- */
 .sidebar-nav {
   flex: 1;
   width: 100%;
@@ -149,34 +150,32 @@ html.dark {
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 8px 0;
+  padding: var(--theme-spacing-sm) 0;
 }
 
 .sidebar-nav::-webkit-scrollbar {
   display: none;
 }
 
-/* --- 菜单项样式 (卡片化) --- */
+/* 菜单项 (卡片化) */
 .sidebar-nav-item {
-  border-radius: 10px;
-  margin: 2px 10px;
-  transition: background-color 0.2s ease;
-  padding: 10px 14px;
-  color: var(--apple-text-primary);
+  border-radius: var(--theme-radius-md);
+  margin: 2px var(--theme-spacing-sm);
+  transition: background-color var(--theme-transition-fast), border-color var(--theme-transition-fast);
+  padding: var(--theme-spacing-sm) 14px;
+  color: var(--theme-text-primary);
   position: relative;
   display: flex;
   align-items: center;
 }
 
 .sidebar-nav-item:hover {
-  background-color: var(--apple-item-hover);
-  color: var(--apple-text-primary);
+  background-color: var(--theme-hover-bg);
 }
 
-/* --- 选中状态 (左侧指示条) --- */
+/* 选中状态 (左侧指示条) */
 .sidebar-nav-item-selected {
-  background-color: var(--apple-item-selected);
-  color: var(--apple-text-primary);
+  background-color: var(--theme-active-bg);
   font-weight: 500;
 }
 
@@ -188,11 +187,12 @@ html.dark {
   transform: translateY(-50%);
   width: 3px;
   height: 18px;
-  background: var(--apple-accent);
+  background: var(--theme-accent);
   border-radius: 0 3px 3px 0;
+  box-shadow: var(--theme-shadow-glow-sm);
 }
 
-/* --- 图标容器样式 --- */
+/* 图标容器 */
 .sidebar-icon-container {
   width: 22px;
   height: 22px;
@@ -200,13 +200,13 @@ html.dark {
   align-items: center;
   justify-content: center;
   margin-right: 12px;
-  color: var(--apple-icon-color);
-  transition: color 0.2s ease;
+  color: var(--theme-text-secondary);
+  transition: color var(--theme-transition-fast);
 }
 
 .sidebar-nav-item:hover .sidebar-icon-container,
 .sidebar-nav-item-selected .sidebar-icon-container {
-  color: var(--apple-accent);
+  color: var(--theme-accent);
 }
 
 .sidebar-sub-icon-container {
@@ -217,91 +217,438 @@ html.dark {
   justify-content: center;
   margin-right: 12px;
   margin-left: 2px;
-  color: var(--apple-icon-color);
-  transition: color 0.2s ease;
+  color: var(--theme-text-secondary);
+  transition: color var(--theme-transition-fast);
 }
 
 .sidebar-nav-item:hover .sidebar-sub-icon-container,
 .sidebar-nav-item-selected .sidebar-sub-icon-container {
-  color: var(--apple-accent);
+  color: var(--theme-accent);
 }
 
-/* --- 分割线样式 --- */
+/* 分割线 */
 .sidebar-divider {
-  margin: 8px 14px;
+  margin: var(--theme-spacing-sm) 14px;
   border: none;
   height: 1px;
-  background: var(--apple-sidebar-border);
+  background: var(--theme-glass-border);
 }
 
-/* --- 分组标签样式 --- */
+/* 分组标签 */
 .sidebar-group-label {
-  padding: 16px 14px 8px;
-  color: var(--apple-text-secondary);
+  padding: var(--theme-spacing-md) 14px var(--theme-spacing-sm);
+  color: var(--theme-text-muted);
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
 
-/* --- 底部折叠按钮 --- */
+/* 折叠按钮 */
 .sidebar-collapse-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px;
+  padding: var(--theme-spacing-sm);
   margin-top: auto;
   cursor: pointer;
   background: transparent;
   position: sticky;
   bottom: 0;
   z-index: 10;
-  border-top: 1px solid var(--apple-sidebar-border);
+  border-top: 1px solid var(--theme-glass-border);
 }
 
 .sidebar-collapse-button-inner {
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--theme-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--apple-item-hover);
-  color: var(--apple-icon-color);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  background-color: var(--theme-glass-bg);
+  color: var(--theme-text-secondary);
+  transition: background-color var(--theme-transition-fast), color var(--theme-transition-fast);
 }
 
 .sidebar-collapse-button-inner:hover {
-  background-color: var(--apple-item-selected);
-  color: var(--apple-accent);
+  background-color: var(--theme-hover-bg);
+  color: var(--theme-accent);
 }
 
 .sidebar-collapse-icon-container {
   display: inline-block;
-  transition: transform 0.3s ease;
+  transition: transform var(--theme-transition-slow);
 }
 
-/* --- 侧边栏区域容器 --- */
 .sidebar-section {
-  padding-top: 4px;
+  padding-top: var(--theme-spacing-xs);
 }
 
-/* --- 移动端适配 --- */
-@media (max-width: 767px) {
-  .sidebar-container {
-    background: var(--apple-sidebar-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-right: 1px solid var(--apple-sidebar-border);
-  }
+/* ==================== 按钮样式 ==================== */
+.semi-button {
+  border-radius: var(--theme-radius-md) !important;
+  transition: background-color var(--theme-transition-fast), border-color var(--theme-transition-fast), opacity var(--theme-transition-fast) !important;
+}
 
-  .sidebar-nav {
-    background: transparent;
-  }
+.semi-button:hover:not(:disabled):not(.semi-button-disabled) {
+  opacity: 0.9;
+}
 
-  .sidebar-collapse-button {
-    background: transparent;
-  }
+.semi-button:active:not(:disabled):not(.semi-button-disabled) {
+  opacity: 0.8;
+}
+
+.semi-button-primary {
+  background: var(--theme-accent-gradient) !important;
+  border: none !important;
+  color: var(--theme-text-inverse) !important;
+  font-weight: 600 !important;
+}
+
+.semi-button-primary:hover:not(:disabled) {
+  box-shadow: var(--theme-shadow-glow-sm);
+}
+
+.semi-button-secondary,
+.semi-button-tertiary {
+  background: var(--theme-glass-bg) !important;
+  border: 1px solid var(--theme-glass-border) !important;
+  color: var(--theme-text-primary) !important;
+}
+
+.semi-button-secondary:hover:not(:disabled),
+.semi-button-tertiary:hover:not(:disabled) {
+  background: var(--theme-hover-bg) !important;
+  border-color: var(--theme-hover-border) !important;
+}
+
+.semi-button-danger {
+  background: var(--theme-danger) !important;
+  border: none !important;
+}
+
+.semi-button-danger:hover:not(:disabled) {
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+/* ==================== 卡片样式 ==================== */
+.semi-card {
+  background: var(--theme-glass-bg) !important;
+  backdrop-filter: var(--theme-glass-blur);
+  -webkit-backdrop-filter: var(--theme-glass-blur);
+  border: 1px solid var(--theme-glass-border) !important;
+  border-radius: var(--theme-radius-lg) !important;
+  transition: border-color var(--theme-transition-fast) !important;
+}
+
+.semi-card:hover {
+  border-color: var(--theme-hover-border) !important;
+}
+
+.semi-card-header,
+.semi-card-body {
+  padding: var(--theme-spacing-md) !important;
+}
+
+.semi-card-header {
+  border-bottom: 1px solid var(--theme-glass-border) !important;
+}
+
+/* ==================== 表格样式 ==================== */
+.semi-table {
+  border-radius: var(--theme-radius-lg) !important;
+  overflow: hidden;
+  border: 1px solid var(--theme-glass-border) !important;
+  background: transparent !important;
+}
+
+.semi-table-thead {
+  background: var(--theme-glass-bg) !important;
+}
+
+.semi-table-thead > .semi-table-row > .semi-table-row-head {
+  font-weight: 600 !important;
+  color: var(--theme-text-secondary) !important;
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  padding: 14px var(--theme-spacing-md) !important;
+  border-bottom: 1px solid var(--theme-glass-border) !important;
+  background: transparent !important;
+}
+
+.semi-table-tbody > .semi-table-row > .semi-table-row-cell {
+  padding: 14px var(--theme-spacing-md) !important;
+  border-bottom: 1px solid var(--theme-glass-border) !important;
+  color: var(--theme-text-primary);
+}
+
+.semi-table-tbody > .semi-table-row:last-child > .semi-table-row-cell {
+  border-bottom: none !important;
+}
+
+.semi-table-row {
+  transition: background-color var(--theme-transition-fast) !important;
+}
+
+.semi-table-row:hover {
+  background-color: var(--theme-hover-bg) !important;
+}
+
+.semi-table-row-selected {
+  background-color: var(--theme-active-bg) !important;
+}
+
+/* ==================== 输入框样式 ==================== */
+.semi-input-wrapper,
+.semi-select,
+.semi-input-textarea-wrapper {
+  border-radius: var(--theme-radius-md) !important;
+  border: 1px solid var(--theme-glass-input-border) !important;
+  background: var(--theme-glass-input-bg) !important;
+  transition: border-color var(--theme-transition-fast), box-shadow var(--theme-transition-fast) !important;
+}
+
+.semi-input-wrapper:focus-within,
+.semi-select-focus,
+.semi-input-textarea-wrapper:focus-within {
+  border-color: var(--theme-focus-border) !important;
+  box-shadow: var(--theme-focus-shadow) !important;
+}
+
+.semi-input,
+.semi-input-textarea {
+  color: var(--theme-text-primary) !important;
+}
+
+.semi-input::placeholder,
+.semi-input-textarea::placeholder {
+  color: var(--theme-text-muted) !important;
+}
+
+/* ==================== 下拉菜单样式 ==================== */
+.semi-select-option-list {
+  border-radius: var(--theme-radius-md) !important;
+  padding: var(--theme-spacing-xs) !important;
+  background: var(--theme-bg-elevated) !important;
+  backdrop-filter: var(--theme-glass-blur);
+  border: 1px solid var(--theme-glass-border) !important;
+  box-shadow: var(--theme-shadow-card) !important;
+}
+
+.semi-select-option {
+  border-radius: var(--theme-radius-sm) !important;
+  margin: 2px 0 !important;
+  transition: background-color var(--theme-transition-fast) !important;
+  color: var(--theme-text-primary) !important;
+}
+
+.semi-select-option:hover {
+  background-color: var(--theme-hover-bg) !important;
+}
+
+.semi-select-option-selected {
+  background-color: var(--theme-active-bg) !important;
+  color: var(--theme-accent) !important;
+}
+
+/* ==================== Modal 样式 ==================== */
+.semi-modal-content {
+  border-radius: var(--theme-radius-lg) !important;
+  background: var(--theme-bg-elevated) !important;
+  backdrop-filter: var(--theme-glass-modal-blur);
+  border: 1px solid var(--theme-glass-modal-border) !important;
+  box-shadow: var(--theme-shadow-modal) !important;
+}
+
+.semi-modal-header {
+  padding: var(--theme-spacing-lg) var(--theme-spacing-lg) var(--theme-spacing-md) !important;
+  border-bottom: 1px solid var(--theme-glass-border) !important;
+}
+
+.semi-modal-body {
+  padding: var(--theme-spacing-lg) !important;
+}
+
+.semi-modal-footer {
+  padding: var(--theme-spacing-md) var(--theme-spacing-lg) var(--theme-spacing-lg) !important;
+  border-top: 1px solid var(--theme-glass-border) !important;
+}
+
+.semi-modal-title {
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  color: var(--theme-text-primary) !important;
+}
+
+/* ==================== SideSheet 样式 ==================== */
+.semi-sidesheet {
+  border-radius: var(--theme-radius-lg) 0 0 var(--theme-radius-lg) !important;
+}
+
+.semi-sidesheet-inner {
+  background: var(--theme-bg-elevated) !important;
+  backdrop-filter: var(--theme-glass-modal-blur);
+  border-left: 1px solid var(--theme-glass-modal-border) !important;
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+.semi-sidesheet-header {
+  padding: var(--theme-spacing-lg) var(--theme-spacing-lg) var(--theme-spacing-md) !important;
+  border-bottom: 1px solid var(--theme-glass-border) !important;
+}
+
+.semi-sidesheet-body {
+  padding: var(--theme-spacing-lg) !important;
+}
+
+.semi-sidesheet-footer {
+  padding: var(--theme-spacing-md) var(--theme-spacing-lg) var(--theme-spacing-lg) !important;
+  border-top: 1px solid var(--theme-glass-border) !important;
+}
+
+/* ==================== Tabs 样式 ==================== */
+.semi-tabs-bar {
+  border-bottom: 1px solid var(--theme-glass-border) !important;
+}
+
+.semi-tabs-tab {
+  padding: var(--theme-spacing-sm) var(--theme-spacing-md) !important;
+  font-weight: 500 !important;
+  color: var(--theme-text-secondary) !important;
+  transition: color var(--theme-transition-fast) !important;
+}
+
+.semi-tabs-tab:hover {
+  color: var(--theme-text-primary) !important;
+}
+
+.semi-tabs-tab-active {
+  color: var(--theme-accent) !important;
+}
+
+.semi-tabs-ink-bar {
+  height: 2px !important;
+  background: var(--theme-accent) !important;
+  border-radius: 2px !important;
+  box-shadow: var(--theme-shadow-glow-sm);
+}
+
+/* ==================== Tag 样式 ==================== */
+.semi-tag {
+  border-radius: var(--theme-radius-xs) !important;
+  border: 1px solid currentColor !important;
+  background: transparent !important;
+}
+
+/* ==================== Toast/Notification 样式 ==================== */
+.semi-toast-wrapper {
+  border-radius: var(--theme-radius-md) !important;
+  background: var(--theme-bg-elevated) !important;
+  backdrop-filter: var(--theme-glass-blur);
+  border: 1px solid var(--theme-glass-border) !important;
+  box-shadow: var(--theme-shadow-card) !important;
+}
+
+.semi-notification-notice {
+  border-radius: var(--theme-radius-md) !important;
+  background: var(--theme-bg-elevated) !important;
+  backdrop-filter: var(--theme-glass-blur);
+  border: 1px solid var(--theme-glass-border) !important;
+  box-shadow: var(--theme-shadow-card) !important;
+}
+
+/* ==================== Popover/Dropdown 样式 ==================== */
+.semi-popover-wrapper {
+  border-radius: var(--theme-radius-md) !important;
+  background: var(--theme-bg-elevated) !important;
+  backdrop-filter: var(--theme-glass-blur);
+  border: 1px solid var(--theme-glass-border) !important;
+  box-shadow: var(--theme-shadow-card) !important;
+}
+
+.semi-dropdown-menu {
+  padding: var(--theme-spacing-xs) !important;
+  border-radius: var(--theme-radius-md) !important;
+}
+
+.semi-dropdown-item {
+  border-radius: var(--theme-radius-sm) !important;
+  padding: var(--theme-spacing-sm) var(--theme-spacing-sm) !important;
+  margin: 2px 0 !important;
+  transition: background-color var(--theme-transition-fast) !important;
+}
+
+.semi-dropdown-item:hover {
+  background-color: var(--theme-hover-bg) !important;
+}
+
+/* ==================== Tooltip 样式 ==================== */
+.semi-tooltip-wrapper {
+  border-radius: var(--theme-radius-sm) !important;
+  background: var(--theme-bg-elevated) !important;
+  border: 1px solid var(--theme-glass-border) !important;
+  padding: var(--theme-spacing-xs) var(--theme-spacing-sm) !important;
+}
+
+/* ==================== Switch 样式 ==================== */
+.semi-switch {
+  border-radius: var(--theme-radius-full) !important;
+}
+
+.semi-switch-checked {
+  background: var(--theme-accent) !important;
+  box-shadow: var(--theme-shadow-glow-sm);
+}
+
+/* ==================== Progress 样式 ==================== */
+.semi-progress-track {
+  border-radius: var(--theme-radius-xs) !important;
+  background: var(--theme-glass-bg) !important;
+}
+
+.semi-progress-bar {
+  border-radius: var(--theme-radius-xs) !important;
+  background: var(--theme-accent-gradient) !important;
+}
+
+/* ==================== Pagination 样式 ==================== */
+.semi-page-item {
+  border-radius: var(--theme-radius-sm) !important;
+  transition: background-color var(--theme-transition-fast) !important;
+}
+
+.semi-page-item:hover:not(.semi-page-item-disabled):not(.semi-page-item-active) {
+  background-color: var(--theme-hover-bg) !important;
+}
+
+.semi-page-item-active {
+  background: var(--theme-accent) !important;
+  color: var(--theme-text-inverse) !important;
+  box-shadow: var(--theme-shadow-glow-sm);
+}
+
+/* ==================== Avatar 样式 ==================== */
+.semi-avatar {
+  border: 1px solid var(--theme-glass-border) !important;
+}
+
+/* ==================== 自定义圆角统一 ==================== */
+.semi-radio,
+.semi-tagInput,
+.semi-input-textarea-wrapper,
+.semi-navigation-sub-title,
+.semi-chat-inputBox-sendButton,
+.semi-page-item,
+.semi-navigation-item,
+.semi-tag-closable,
+.semi-input-wrapper,
+.semi-tabs-tab-button,
+.semi-select,
+.semi-button,
+.semi-datepicker-range-input {
+  border-radius: var(--theme-radius-md) !important;
 }
 
 /* ==================== 聊天界面样式 ==================== */
@@ -349,445 +696,7 @@ html.dark {
   column-gap: 0 !important;
 }
 
-.semi-chat-inputBox-clearButton.semi-button .semi-icon {
-  font-size: 20px !important;
-}
-
-/* 隐藏所有聊天相关区域的滚动条 */
-.semi-chat::-webkit-scrollbar,
-.semi-chat-chatBox::-webkit-scrollbar,
-.semi-chat-chatBox-wrap::-webkit-scrollbar,
-.semi-chat-chatBox-content::-webkit-scrollbar,
-.semi-chat-content::-webkit-scrollbar,
-.semi-chat-list::-webkit-scrollbar,
-.semi-chat-container::-webkit-scrollbar {
-  display: none;
-}
-
-.semi-chat,
-.semi-chat-chatBox,
-.semi-chat-chatBox-wrap,
-.semi-chat-chatBox-content,
-.semi-chat-content,
-.semi-chat-list,
-.semi-chat-container {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* ==================== 组件特定样式 ==================== */
-/* SelectableButtonGroup */
-.sbg-button .semi-button-content {
-  min-width: 0 !important;
-}
-
-.sbg-content {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  width: 100%;
-  min-width: 0;
-}
-
-.sbg-ellipsis {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* Tabs组件样式 */
-.semi-tabs-content {
-  padding: 0 !important;
-  height: calc(100% - 40px) !important;
-  flex: 1 !important;
-}
-
-.semi-tabs-content .semi-tabs-pane {
-  height: 100% !important;
-  overflow: hidden !important;
-}
-
-.semi-tabs-content .semi-tabs-pane > div {
-  height: 100% !important;
-}
-
-/* 表格样式 */
-.tableShow {
-  display: revert;
-}
-
-.tableHiddle {
-  display: none !important;
-}
-
-/* 页脚样式 */
-.custom-footer {
-  font-size: 1.1em;
-}
-
-/* 卡片内容容器通用样式 */
-.card-content-container {
-  position: relative;
-}
-
-.card-content-fade-indicator {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 30px;
-  background: linear-gradient(transparent, var(--semi-color-bg-1));
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-/* ==================== 调试面板特定样式 ==================== */
-.debug-panel .semi-tabs {
-  height: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.debug-panel .semi-tabs-bar {
-  flex-shrink: 0 !important;
-}
-
-.debug-panel .semi-tabs-content {
-  flex: 1 !important;
-  overflow: hidden !important;
-}
-
-/* ==================== 滚动条样式统一管理 ==================== */
-/* 通用隐藏滚动条工具类 */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  width: 0 !important;
-  height: 0 !important;
-  display: none !important;
-  /* Chrome, Safari, Opera */
-}
-
-/* 表格滚动条样式 */
-.semi-table-body::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.semi-table-body::-webkit-scrollbar-thumb {
-  background: rgba(var(--semi-grey-2), 0.3);
-  border-radius: 2px;
-}
-
-.semi-table-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--semi-grey-2), 0.5);
-}
-
-.semi-table-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* 侧边抽屉滚动条样式 */
-.semi-sidesheet-body::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.semi-sidesheet-body::-webkit-scrollbar-thumb {
-  background: rgba(var(--semi-grey-2), 0.3);
-  border-radius: 2px;
-}
-
-.semi-sidesheet-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--semi-grey-2), 0.5);
-}
-
-.semi-sidesheet-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* 隐藏内容区域滚动条 */
-.pricing-scroll-hide,
-.model-test-scroll,
-.card-content-scroll,
-.model-settings-scroll,
-.thinking-content-scroll,
-.custom-request-textarea .semi-input,
-.custom-request-textarea textarea,
-.notice-content-scroll {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.pricing-scroll-hide::-webkit-scrollbar,
-.model-test-scroll::-webkit-scrollbar,
-.card-content-scroll::-webkit-scrollbar,
-.model-settings-scroll::-webkit-scrollbar,
-.thinking-content-scroll::-webkit-scrollbar,
-.custom-request-textarea .semi-input::-webkit-scrollbar,
-.custom-request-textarea textarea::-webkit-scrollbar,
-.notice-content-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-/* 图片列表滚动条样式 */
-.image-list-scroll::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.image-list-scroll::-webkit-scrollbar-thumb {
-  background: var(--semi-color-tertiary-light-default);
-  border-radius: 3px;
-}
-
-.image-list-scroll::-webkit-scrollbar-thumb:hover {
-  background: var(--semi-color-tertiary);
-}
-
-.image-list-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* ==================== 同步倍率 - 渠道选择器 ==================== */
-
-.components-transfer-source-item,
-.components-transfer-selected-item {
-  display: flex;
-  align-items: center;
-  padding: 8px;
-}
-
-.semi-transfer-left-list,
-.semi-transfer-right-list {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.semi-transfer-left-list::-webkit-scrollbar,
-.semi-transfer-right-list::-webkit-scrollbar {
-  display: none;
-}
-
-.components-transfer-source-item .semi-checkbox,
-.components-transfer-selected-item .semi-checkbox {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.components-transfer-source-item .semi-avatar,
-.components-transfer-selected-item .semi-avatar {
-  margin-right: 12px;
-  flex-shrink: 0;
-}
-
-.components-transfer-source-item .info,
-.components-transfer-selected-item .info {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.components-transfer-source-item .name,
-.components-transfer-selected-item .name {
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.components-transfer-source-item .email,
-.components-transfer-selected-item .email {
-  font-size: 12px;
-  color: var(--semi-color-text-2);
-  display: flex;
-  align-items: center;
-}
-
-.components-transfer-selected-item .semi-icon-close {
-  margin-left: 8px;
-  cursor: pointer;
-  color: var(--semi-color-text-2);
-}
-
-.components-transfer-selected-item .semi-icon-close:hover {
-  color: var(--semi-color-text-0);
-}
-
-/* ==================== 未读通知闪光效果 ==================== */
-@keyframes sweep-shine {
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-.shine-text {
-  background: linear-gradient(
-    90deg,
-    currentColor 0%,
-    currentColor 40%,
-    rgba(255, 255, 255, 0.9) 50%,
-    currentColor 60%,
-    currentColor 100%
-  );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: sweep-shine 4s linear infinite;
-}
-
-.dark .shine-text {
-  background: linear-gradient(
-    90deg,
-    currentColor 0%,
-    currentColor 40%,
-    #facc15 50%,
-    currentColor 60%,
-    currentColor 100%
-  );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* ==================== ScrollList 定制样式 ==================== */
-.semi-scrolllist,
-.semi-scrolllist * {
-  -ms-overflow-style: none;
-  /* IE, Edge */
-  scrollbar-width: none;
-  /* Firefox */
-  background: transparent !important;
-}
-
-.semi-scrolllist::-webkit-scrollbar,
-.semi-scrolllist *::-webkit-scrollbar {
-  width: 0 !important;
-  height: 0 !important;
-  display: none !important;
-}
-
-.semi-scrolllist-body {
-  padding: 1px !important;
-}
-
-.semi-scrolllist-list-outer {
-  padding-right: 0 !important;
-}
-
-/* ==================== Banner 背景模糊球 ==================== */
-.blur-ball {
-  position: absolute;
-  width: 360px;
-  height: 360px;
-  border-radius: 50%;
-  filter: blur(120px);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.blur-ball-indigo {
-  background: #6366f1;
-  /* indigo-500 */
-  top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0.5;
-}
-
-.blur-ball-teal {
-  background: #14b8a6;
-  /* teal-400 */
-  top: 200px;
-  left: 30%;
-  opacity: 0.4;
-}
-
-/* 浅色主题下让模糊球更柔和 */
-html:not(.dark) .blur-ball-indigo {
-  opacity: 0.25;
-}
-
-html:not(.dark) .blur-ball-teal {
-  opacity: 0.2;
-}
-
-/* ==================== 卡片马卡龙模糊球（类封装） ==================== */
-/* 使用方式：给容器加上 with-pastel-balls 类即可，无需在 JSX 中插入额外节点 */
-.with-pastel-balls {
-  position: relative;
-  overflow: hidden;
-  /* 默认变量（明亮模式） */
-  --pb1: #ffd1dc;
-  /* 粉 */
-  --pb2: #e5d4ff;
-  /* 薰衣草 */
-  --pb3: #d1fff6;
-  /* 薄荷 */
-  --pb4: #ffe5d9;
-  /* 桃 */
-  --pb-opacity: 0.55;
-  --pb-blur: 60px;
-}
-
-.with-pastel-balls::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background: radial-gradient(
-      circle at -5% -10%,
-      var(--pb1) 0%,
-      transparent 60%
-    ),
-    radial-gradient(circle at 105% -10%, var(--pb2) 0%, transparent 55%),
-    radial-gradient(circle at 5% 110%, var(--pb3) 0%, transparent 55%),
-    radial-gradient(circle at 105% 110%, var(--pb4) 0%, transparent 50%);
-  filter: blur(var(--pb-blur));
-  opacity: var(--pb-opacity);
-  transform: translateZ(0);
-}
-
-/* 暗黑模式下更柔和的色彩和透明度 */
-html.dark .with-pastel-balls {
-  /* 使用与明亮模式一致的“刚才那组”马卡龙色，但整体更柔和 */
-  --pb1: #ffd1dc;
-  /* 粉 */
-  --pb2: #e5d4ff;
-  /* 薰衣草 */
-  --pb3: #d1fff6;
-  /* 薄荷 */
-  --pb4: #ffe5d9;
-  /* 桃 */
-  --pb-opacity: 0.36;
-  --pb-blur: 65px;
-}
-
-/* 暗黑模式下用更柔和的混合模式避免突兀的高亮 */
-html.dark .with-pastel-balls::before {
-  mix-blend-mode: screen;
-}
-
-/* ==================== 表格卡片滚动设置 ==================== */
+/* ==================== 表格卡片滚动 ==================== */
 .table-scroll-card {
   display: flex;
   flex-direction: column;
@@ -805,23 +714,16 @@ html.dark .with-pastel-balls::before {
 }
 
 .table-scroll-card .semi-card-body::-webkit-scrollbar-thumb {
-  background: rgba(var(--semi-grey-2), 0.3);
-  border-radius: 2px;
+  background: var(--theme-glass-border);
+  border-radius: 3px;
 }
 
 .table-scroll-card .semi-card-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--semi-grey-2), 0.5);
+  background: var(--theme-hover-bg);
 }
 
 .table-scroll-card .semi-card-body::-webkit-scrollbar-track {
   background: transparent;
-}
-
-@media (max-width: 767px) {
-  .table-scroll-card {
-    height: calc(100vh - 77px);
-    max-height: calc(100vh - 77px);
-  }
 }
 
 /* ==================== 模型定价页面布局 ==================== */
@@ -836,581 +738,57 @@ html.dark .with-pastel-balls::before {
   min-width: clamp(280px, 24vw, 520px) !important;
   max-width: clamp(280px, 24vw, 520px) !important;
   height: calc(100vh - 60px);
-  background-color: var(--semi-color-bg-0);
+  background-color: transparent;
   overflow: auto;
 }
 
 .pricing-content {
   height: calc(100vh - 60px);
-  background-color: var(--semi-color-bg-0);
+  background-color: transparent;
   display: flex;
   flex-direction: column;
 }
 
-.pricing-pagination-divider {
-  border-color: var(--semi-color-border);
-}
-
-.pricing-content-mobile {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-}
-
-.pricing-search-header {
-  padding: 0.5rem;
-  background-color: var(--semi-color-bg-0);
-  flex-shrink: 0;
-  position: sticky;
-  top: 0;
-  z-index: 5;
-}
-
-.pricing-view-container {
-  flex: 1;
-  overflow: auto;
-}
-
-.pricing-view-container-mobile {
-  flex: 1;
-  overflow: auto;
-  min-height: 0;
-}
-
-/* ==================== semi-ui 组件自定义样式 ==================== */
-.semi-card-header,
-.semi-card-body {
-  padding: 10px !important;
-}
-
-/* ==================== 使用日志: channel affinity tag ==================== */
+/* ==================== 渠道亲和性标签 ==================== */
 .semi-tag.channel-affinity-tag {
-  border: 1px solid rgba(var(--semi-cyan-5), 0.35);
-  background-color: rgba(var(--semi-cyan-5), 0.15);
-  color: rgba(var(--semi-cyan-9), 1);
+  border: 1px solid var(--theme-accent) !important;
+  background-color: var(--theme-active-bg) !important;
+  color: var(--theme-accent) !important;
   cursor: help;
-  transition:
-    background-color 120ms ease,
-    border-color 120ms ease,
-    box-shadow 120ms ease;
+  transition: background-color var(--theme-transition-fast), box-shadow var(--theme-transition-fast);
 }
 
 .semi-tag.channel-affinity-tag:hover {
-  background-color: rgba(var(--semi-cyan-5), 0.22);
-  border-color: rgba(var(--semi-cyan-5), 0.6);
-  box-shadow: 0 0 0 2px rgba(var(--semi-cyan-5), 0.18);
+  background-color: var(--theme-hover-bg) !important;
+  box-shadow: var(--theme-shadow-glow-sm);
 }
 
-.semi-tag.channel-affinity-tag:active {
-  background-color: rgba(var(--semi-cyan-5), 0.28);
+/* ==================== 滚动条隐藏工具类 ==================== */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.semi-tag.channel-affinity-tag .channel-affinity-tag-content {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
 }
 
-/* ==================== 自定义圆角样式 ==================== */
-.semi-radio,
-.semi-tagInput,
-.semi-input-textarea-wrapper,
-.semi-navigation-sub-title,
-.semi-chat-inputBox-sendButton,
-.semi-page-item,
-.semi-navigation-item,
-.semi-tag-closable,
-.semi-input-wrapper,
-.semi-tabs-tab-button,
-.semi-select,
-.semi-button,
-.semi-datepicker-range-input {
-  border-radius: 10px !important;
-}
-
-/* ==================== Apple风格动效系统 ==================== */
-/*
- * 设计原则：
- * - 微妙而不突兀的交互反馈
- * - 统一的过渡时间 (150ms-300ms)
- * - 柔和的缓动函数 (ease-out)
- */
-
-/* ---------- 按钮悬停动效 ---------- */
-.semi-button {
-  transition:
-    transform 150ms ease-out,
-    box-shadow 150ms ease-out,
-    background-color 150ms ease-out,
-    border-color 150ms ease-out !important;
-}
-
-.semi-button:hover:not(:disabled):not(.semi-button-disabled) {
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.semi-button:active:not(:disabled):not(.semi-button-disabled) {
-  transform: translateY(0) scale(0.98);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-/* 主要按钮特殊效果 */
-/* ---------- 按钮样式 (Apple扁平化) ---------- */
-.semi-button {
-  transition: background-color 150ms ease-out, border-color 150ms ease-out, opacity 150ms ease-out !important;
-}
-
-.semi-button:hover:not(:disabled):not(.semi-button-disabled) {
-  opacity: 0.85;
-}
-
-.semi-button:active:not(:disabled):not(.semi-button-disabled) {
-  opacity: 0.7;
-}
-
-/* 主要按钮 Apple 蓝 */
-.semi-button-primary {
-  background: var(--apple-accent, #007AFF) !important;
-  border-color: var(--apple-accent, #007AFF) !important;
-}
-
-html.dark .semi-button-primary {
-  background: var(--apple-accent, #0A84FF) !important;
-  border-color: var(--apple-accent, #0A84FF) !important;
-}
-
-/* ---------- 卡片样式 (Apple扁平化) ---------- */
-.semi-card {
-  border-radius: 16px !important;
-  border: 1px solid rgba(0, 0, 0, 0.04) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-  background: #ffffff !important;
-  transition: border-color 150ms ease-out !important;
-}
-
-html.dark .semi-card {
-  background: #1c1c1e !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: none !important;
-}
-
-.semi-card:hover {
-  border-color: rgba(0, 0, 0, 0.08) !important;
-}
-
-html.dark .semi-card:hover {
-  border-color: rgba(255, 255, 255, 0.12) !important;
-}
-
-/* ---------- 表格样式 (Apple扁平化) ---------- */
-.semi-table {
-  border-radius: 16px !important;
-  overflow: hidden;
-  border: none !important;
-  background: transparent !important;
-}
-
-.semi-table-thead {
-  background: #f5f5f7 !important;
-}
-
-html.dark .semi-table-thead {
-  background: #2c2c2e !important;
-}
-
-.semi-table-thead > .semi-table-row > .semi-table-row-head {
-  font-weight: 500 !important;
-  color: var(--apple-text-secondary, #86868b) !important;
-  font-size: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  padding: 12px 16px !important;
-  border-bottom: none !important;
-  background: transparent !important;
-}
-
-html.dark .semi-table-thead > .semi-table-row > .semi-table-row-head {
-  color: var(--apple-text-secondary, #98989d) !important;
-}
-
-.semi-table-tbody > .semi-table-row > .semi-table-row-cell {
-  padding: 14px 16px !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04) !important;
-}
-
-html.dark .semi-table-tbody > .semi-table-row > .semi-table-row-cell {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
-}
-
-.semi-table-tbody > .semi-table-row:last-child > .semi-table-row-cell {
-  border-bottom: none !important;
-}
-
-.semi-table-row {
-  transition: background-color 150ms ease-out !important;
-}
-
-.semi-table-row:hover {
-  background-color: #f5f5f7 !important;
-}
-
-html.dark .semi-table-row:hover {
-  background-color: #2c2c2e !important;
-}
-
-.semi-table-row-selected {
-  background-color: rgba(0, 122, 255, 0.06) !important;
-}
-
-.semi-table-row-selected:hover {
-  background-color: rgba(0, 122, 255, 0.1) !important;
-}
-
-/* ---------- 输入框样式 (Apple扁平化) ---------- */
-.semi-input-wrapper,
-.semi-select,
-.semi-input-textarea-wrapper {
-  border-radius: 10px !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  background: #ffffff !important;
-  transition: border-color 150ms ease-out !important;
-}
-
-html.dark .semi-input-wrapper,
-html.dark .semi-select,
-html.dark .semi-input-textarea-wrapper {
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: #1c1c1e !important;
-}
-
-.semi-input-wrapper:focus-within,
-.semi-select-focus,
-.semi-input-textarea-wrapper:focus-within {
-  border-color: var(--apple-accent, #007AFF) !important;
-}
-
-html.dark .semi-input-wrapper:focus-within,
-html.dark .semi-select-focus,
-html.dark .semi-input-textarea-wrapper:focus-within {
-  border-color: var(--apple-accent, #0A84FF) !important;
-}
-
-/* ---------- 标签样式 (Apple扁平化) ---------- */
-.semi-tag {
-  border-radius: 6px !important;
-  transition: background-color 120ms ease-out !important;
-}
-
-/* ---------- 下拉菜单样式 (Apple扁平化) ---------- */
-.semi-select-option-list {
-  border-radius: 12px !important;
-  padding: 6px !important;
-  background: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
-}
-
-html.dark .semi-select-option-list {
-  background: #2c2c2e !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
-}
-
-.semi-select-option {
-  border-radius: 8px !important;
-  margin: 2px 0 !important;
-  transition: background-color 100ms ease-out !important;
-}
-
-.semi-select-option:hover {
-  background-color: #f5f5f7 !important;
-}
-
-html.dark .semi-select-option:hover {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-.semi-select-option-selected {
-  background-color: rgba(0, 122, 255, 0.1) !important;
-  color: var(--apple-accent, #007AFF) !important;
-}
-
-html.dark .semi-select-option-selected {
-  color: var(--apple-accent, #0A84FF) !important;
-}
-
-/* ---------- Modal样式 (Apple扁平化) ---------- */
-.semi-modal-content {
-  border-radius: 16px !important;
-  background: #ffffff !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
-}
-
-html.dark .semi-modal-content {
-  background: #1c1c1e !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-.semi-modal-header {
-  padding: 20px 24px 16px !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
-}
-
-html.dark .semi-modal-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.semi-modal-body {
-  padding: 20px 24px !important;
-}
-
-.semi-modal-footer {
-  padding: 16px 24px 20px !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
-}
-
-html.dark .semi-modal-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.semi-modal-title {
-  font-size: 17px !important;
-  font-weight: 600 !important;
-}
-
-/* ---------- SideSheet样式 (Apple扁平化) ---------- */
-.semi-sidesheet {
-  border-radius: 16px 0 0 16px !important;
-}
-
-.semi-sidesheet-inner {
-  background: #ffffff !important;
-  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.1) !important;
-  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-html.dark .semi-sidesheet-inner {
-  background: #1c1c1e !important;
-  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.4) !important;
-  border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-.semi-sidesheet-header {
-  padding: 20px 24px 16px !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
-}
-
-html.dark .semi-sidesheet-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.semi-sidesheet-body {
-  padding: 20px 24px !important;
-}
-
-.semi-sidesheet-footer {
-  padding: 16px 24px 20px !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
-}
-
-html.dark .semi-sidesheet-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-/* ---------- Tooltip样式 (Apple扁平化) ---------- */
-.semi-tooltip-wrapper {
-  border-radius: 8px !important;
-  background: rgba(0, 0, 0, 0.75) !important;
-  padding: 6px 10px !important;
-}
-
-html.dark .semi-tooltip-wrapper {
-  background: rgba(60, 60, 60, 0.95) !important;
-}
-
-/* ---------- Popover/Dropdown样式 (Apple扁平化) ---------- */
-.semi-popover-wrapper {
-  border-radius: 12px !important;
-  background: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
-}
-
-html.dark .semi-popover-wrapper {
-  background: #2c2c2e !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
-}
-
-.semi-dropdown-menu {
-  padding: 6px !important;
-  border-radius: 12px !important;
-}
-
-.semi-dropdown-item {
-  border-radius: 8px !important;
-  padding: 10px 12px !important;
-  margin: 2px 0 !important;
-  transition: background-color 100ms ease-out !important;
-}
-
-.semi-dropdown-item:hover {
-  background-color: #f5f5f7 !important;
-}
-
-html.dark .semi-dropdown-item:hover {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-/* ---------- Toast/Notification样式 (Apple扁平化) ---------- */
-.semi-toast-wrapper {
-  border-radius: 12px !important;
-  background: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.06) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
-  padding: 14px 18px !important;
-}
-
-html.dark .semi-toast-wrapper {
-  background: #2c2c2e !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
-}
-
-.semi-notification-notice {
-  border-radius: 12px !important;
-  background: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.06) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
-}
-
-html.dark .semi-notification-notice {
-  background: #2c2c2e !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
-}
-
-/* ---------- 分页器样式 (Apple扁平化) ---------- */
-.semi-page-item {
-  border-radius: 8px !important;
-  transition: background-color 150ms ease-out !important;
-}
-
-.semi-page-item:hover:not(.semi-page-item-disabled):not(.semi-page-item-active) {
-  background-color: #f5f5f7 !important;
-}
-
-html.dark .semi-page-item:hover:not(.semi-page-item-disabled):not(.semi-page-item-active) {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-.semi-page-item-active {
-  background: var(--apple-accent, #007AFF) !important;
-  color: white !important;
-}
-
-html.dark .semi-page-item-active {
-  background: var(--apple-accent, #0A84FF) !important;
-}
-
-/* ---------- Tabs样式 (Apple扁平化) ---------- */
-.semi-tabs-bar {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
-}
-
-html.dark .semi-tabs-bar {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.semi-tabs-tab {
-  padding: 12px 16px !important;
-  font-weight: 500 !important;
-  color: var(--apple-text-secondary, #86868b) !important;
-  transition: color 150ms ease-out !important;
-}
-
-.semi-tabs-tab:hover {
-  color: var(--apple-text-primary, #1d1d1f) !important;
-}
-
-html.dark .semi-tabs-tab:hover {
-  color: var(--apple-text-primary, #f5f5f7) !important;
-}
-
-.semi-tabs-tab-active {
-  color: var(--apple-accent, #007AFF) !important;
-}
-
-html.dark .semi-tabs-tab-active {
-  color: var(--apple-accent, #0A84FF) !important;
-}
-
-.semi-tabs-ink-bar {
-  height: 2px !important;
-  background: var(--apple-accent, #007AFF) !important;
-  border-radius: 2px !important;
-}
-
-html.dark .semi-tabs-ink-bar {
-  background: var(--apple-accent, #0A84FF) !important;
-}
-
-/* ---------- Switch样式 (Apple扁平化) ---------- */
-.semi-switch {
-  border-radius: 16px !important;
-}
-
-.semi-switch-checked {
-  background: var(--apple-accent, #007AFF) !important;
-}
-
-html.dark .semi-switch-checked {
-  background: var(--apple-accent, #0A84FF) !important;
-}
-
-/* ---------- 进度条样式 (Apple扁平化) ---------- */
-.semi-progress-track {
-  border-radius: 4px !important;
-  background: rgba(0, 0, 0, 0.06) !important;
-}
-
-html.dark .semi-progress-track {
-  background: rgba(255, 255, 255, 0.1) !important;
-}
-
-.semi-progress-bar {
-  border-radius: 4px !important;
-  background: var(--apple-accent, #007AFF) !important;
-}
-
-html.dark .semi-progress-bar {
-  background: var(--apple-accent, #0A84FF) !important;
-}
-
-.stagger-item:nth-child(1) { animation-delay: 0ms; }
-.stagger-item:nth-child(2) { animation-delay: 50ms; }
-.stagger-item:nth-child(3) { animation-delay: 100ms; }
-.stagger-item:nth-child(4) { animation-delay: 150ms; }
-.stagger-item:nth-child(5) { animation-delay: 200ms; }
-.stagger-item:nth-child(6) { animation-delay: 250ms; }
-.stagger-item:nth-child(7) { animation-delay: 300ms; }
-.stagger-item:nth-child(8) { animation-delay: 350ms; }
-
-@keyframes stagger-enter {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+/* ==================== 响应式适配 ==================== */
+@media (max-width: 767px) {
+  .sidebar-container {
+    background: var(--theme-bg-elevated);
+    border-right: 1px solid var(--theme-glass-border);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .table-scroll-card {
+    height: calc(100vh - 77px);
+    max-height: calc(100vh - 77px);
   }
 }
 
-/* ---------- 减少动画偏好支持 ---------- */
+/* ==================== 减少动画偏好支持 ==================== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

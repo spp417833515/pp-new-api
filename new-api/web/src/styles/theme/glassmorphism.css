@@ -1,0 +1,176 @@
+/*
+ * ============================================================
+ * Glassmorphism 深空灰主题 - 变量配置文件
+ * ============================================================
+ *
+ * 设计理念: 深空灰 + 青绿点缀 + 毛玻璃效果
+ *
+ * 使用说明:
+ * - 所有颜色值集中在此文件定义
+ * - 组件样式只引用 var(--theme-xxx) 变量
+ * - 更换主题只需修改此文件
+ *
+ * 命名规范: --theme-{类别}-{用途}[-{状态}]
+ * ============================================================
+ */
+
+:root {
+  /* ==================== 背景 ==================== */
+  --theme-bg-gradient: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 30%, #16213e 60%, #0f3460 100%);
+  --theme-bg-base: #0f0f0f;
+  --theme-bg-elevated: #1a1a2e;
+
+  /* ==================== 主色/点缀色 ==================== */
+  --theme-accent: #00d9ff;
+  --theme-accent-rgb: 0, 217, 255;
+  --theme-accent-hover: #00c4e6;
+  --theme-accent-active: #00b0cc;
+  --theme-accent-gradient: linear-gradient(135deg, #00d9ff, #00b4d8);
+
+  /* ==================== 文字颜色 ==================== */
+  --theme-text-primary: #e8f4f8;
+  --theme-text-secondary: rgba(255, 255, 255, 0.6);
+  --theme-text-muted: rgba(255, 255, 255, 0.4);
+  --theme-text-inverse: #0f0f0f;
+
+  /* ==================== 毛玻璃效果 ==================== */
+  /* 卡片 */
+  --theme-glass-bg: rgba(255, 255, 255, 0.06);
+  --theme-glass-border: rgba(255, 255, 255, 0.08);
+  --theme-glass-blur: blur(20px);
+
+  /* 侧边栏 */
+  --theme-glass-sidebar-bg: rgba(255, 255, 255, 0.04);
+  --theme-glass-sidebar-border: rgba(255, 255, 255, 0.06);
+
+  /* 弹窗 */
+  --theme-glass-modal-bg: rgba(255, 255, 255, 0.08);
+  --theme-glass-modal-border: rgba(255, 255, 255, 0.1);
+  --theme-glass-modal-blur: blur(24px);
+
+  /* 输入框 */
+  --theme-glass-input-bg: rgba(255, 255, 255, 0.04);
+  --theme-glass-input-border: rgba(255, 255, 255, 0.1);
+
+  /* 顶栏 */
+  --theme-glass-header-bg: rgba(15, 15, 15, 0.85);
+  --theme-glass-header-border: rgba(255, 255, 255, 0.06);
+
+  /* ==================== 交互状态 ==================== */
+  /* 悬停 */
+  --theme-hover-bg: rgba(255, 255, 255, 0.1);
+  --theme-hover-border: rgba(0, 217, 255, 0.3);
+
+  /* 选中/激活 */
+  --theme-active-bg: rgba(0, 217, 255, 0.08);
+  --theme-active-border: rgba(0, 217, 255, 0.5);
+
+  /* 聚焦 */
+  --theme-focus-border: rgba(0, 217, 255, 0.5);
+  --theme-focus-shadow: 0 0 12px rgba(0, 217, 255, 0.2);
+
+  /* 禁用 */
+  --theme-disabled-bg: rgba(255, 255, 255, 0.02);
+  --theme-disabled-text: rgba(255, 255, 255, 0.3);
+
+  /* ==================== 功能色 ==================== */
+  --theme-success: #10b981;
+  --theme-success-bg: rgba(16, 185, 129, 0.1);
+  --theme-success-border: rgba(16, 185, 129, 0.3);
+
+  --theme-warning: #f59e0b;
+  --theme-warning-bg: rgba(245, 158, 11, 0.1);
+  --theme-warning-border: rgba(245, 158, 11, 0.3);
+
+  --theme-danger: #ef4444;
+  --theme-danger-bg: rgba(239, 68, 68, 0.1);
+  --theme-danger-border: rgba(239, 68, 68, 0.3);
+
+  --theme-info: #3b82f6;
+  --theme-info-bg: rgba(59, 130, 246, 0.1);
+  --theme-info-border: rgba(59, 130, 246, 0.3);
+
+  /* ==================== 圆角 ==================== */
+  --theme-radius-xs: 4px;
+  --theme-radius-sm: 6px;
+  --theme-radius-md: 10px;
+  --theme-radius-lg: 16px;
+  --theme-radius-xl: 20px;
+  --theme-radius-full: 9999px;
+
+  /* ==================== 阴影 ==================== */
+  --theme-shadow-glow: 0 0 30px rgba(0, 217, 255, 0.15);
+  --theme-shadow-glow-sm: 0 0 8px rgba(0, 217, 255, 0.5);
+  --theme-shadow-focus: 0 0 12px rgba(0, 217, 255, 0.2);
+  --theme-shadow-card: 0 4px 24px rgba(0, 0, 0, 0.2);
+  --theme-shadow-modal: 0 8px 40px rgba(0, 0, 0, 0.4);
+
+  /* ==================== 间距 ==================== */
+  --theme-spacing-xs: 4px;
+  --theme-spacing-sm: 8px;
+  --theme-spacing-md: 16px;
+  --theme-spacing-lg: 24px;
+  --theme-spacing-xl: 32px;
+
+  /* ==================== 过渡 ==================== */
+  --theme-transition-fast: 150ms ease;
+  --theme-transition-normal: 200ms ease;
+  --theme-transition-slow: 300ms ease;
+
+  /* ==================== 字体 ==================== */
+  --theme-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Microsoft YaHei', sans-serif;
+  --theme-font-mono: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  /* ==================== 层级 ==================== */
+  --theme-z-dropdown: 100;
+  --theme-z-sticky: 200;
+  --theme-z-modal: 1000;
+  --theme-z-toast: 2000;
+
+  /* ==================== 布局 ==================== */
+  --theme-sidebar-width: 200px;
+  --theme-sidebar-collapsed: 60px;
+  --theme-header-height: 60px;
+}
+
+/* ==================== 覆盖 Semi Design 变量 ==================== */
+:root {
+  /* 主色 */
+  --semi-color-primary: var(--theme-accent);
+  --semi-color-primary-hover: var(--theme-accent-hover);
+  --semi-color-primary-active: var(--theme-accent-active);
+  --semi-color-primary-light-default: var(--theme-active-bg);
+
+  /* 背景 */
+  --semi-color-bg-0: var(--theme-bg-base);
+  --semi-color-bg-1: var(--theme-bg-elevated);
+  --semi-color-bg-2: rgba(255, 255, 255, 0.04);
+  --semi-color-bg-3: rgba(255, 255, 255, 0.06);
+  --semi-color-bg-4: rgba(255, 255, 255, 0.08);
+
+  /* 文字 */
+  --semi-color-text-0: var(--theme-text-primary);
+  --semi-color-text-1: var(--theme-text-secondary);
+  --semi-color-text-2: var(--theme-text-muted);
+
+  /* 边框 */
+  --semi-color-border: var(--theme-glass-border);
+
+  /* 填充 */
+  --semi-color-fill-0: var(--theme-glass-bg);
+  --semi-color-fill-1: var(--theme-hover-bg);
+  --semi-color-fill-2: rgba(255, 255, 255, 0.12);
+
+  /* 功能色 */
+  --semi-color-success: var(--theme-success);
+  --semi-color-warning: var(--theme-warning);
+  --semi-color-danger: var(--theme-danger);
+  --semi-color-info: var(--theme-info);
+
+  /* 链接 */
+  --semi-color-link: var(--theme-accent);
+  --semi-color-link-hover: var(--theme-accent-hover);
+
+  /* 聚焦 */
+  --semi-color-focus-border: var(--theme-focus-border);
+}
