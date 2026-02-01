@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Table, Input, Modal, Tabs, Tag, Switch, Select, Avatar, Progress } from '@douyinfe/semi-ui';
+import { Button, Card, Table, Input, Modal, Tabs, TabPane, Tag, Switch, Select, Avatar, Progress } from '@douyinfe/semi-ui';
 import { IconSearch, IconSetting, IconUser, IconHome, IconStar, IconHeartStroked, IconPlus, IconDelete, IconEdit } from '@douyinfe/semi-icons';
 import './styles.css';
 
@@ -129,15 +129,15 @@ const StylePreview = () => {
             {/* 标签页 */}
             <Card className="preview-card" title="标签页 Tabs">
               <Tabs>
-                <Tabs.TabPane tab="基础设置" itemKey="1">
+                <TabPane tab="基础设置" itemKey="1">
                   <p>基础设置内容区域</p>
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="高级设置" itemKey="2">
+                </TabPane>
+                <TabPane tab="高级设置" itemKey="2">
                   <p>高级设置内容区域</p>
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="系统设置" itemKey="3">
+                </TabPane>
+                <TabPane tab="系统设置" itemKey="3">
                   <p>系统设置内容区域</p>
-                </Tabs.TabPane>
+                </TabPane>
               </Tabs>
             </Card>
 
