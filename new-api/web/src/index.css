@@ -583,18 +583,27 @@ code {
   background: transparent !important;
 }
 
-/* 表格固定列背景 (操作列) */
-.semi-table-row-head[style*="sticky"],
-.semi-table-row-cell[style*="sticky"],
-.semi-table .semi-table-row-head.semi-table-cell-fixed-right,
-.semi-table .semi-table-row-cell.semi-table-cell-fixed-right,
-.semi-table .semi-table-row-head.semi-table-cell-fixed-left,
-.semi-table .semi-table-row-cell.semi-table-cell-fixed-left {
+/* 表格固定列背景 (操作列) - 覆盖所有可能的选择器 */
+.semi-table-row-cell[style*="position"],
+.semi-table-row-head[style*="position"],
+td[style*="sticky"],
+th[style*="sticky"],
+.semi-table-cell-fixed,
+.semi-table-cell-fixed-left,
+.semi-table-cell-fixed-right,
+.semi-table-cell-fixed-left-last,
+.semi-table-cell-fixed-right-first,
+.semi-table-row-cell.semi-table-cell-fixed,
+.semi-table-row-head.semi-table-cell-fixed {
   background: var(--theme-bg-elevated) !important;
 }
 
-.semi-table-row:hover .semi-table-row-cell.semi-table-cell-fixed-right,
-.semi-table-row:hover .semi-table-row-cell.semi-table-cell-fixed-left {
+/* 固定列悬停状态 */
+.semi-table-row:hover .semi-table-cell-fixed,
+.semi-table-row:hover .semi-table-cell-fixed-left,
+.semi-table-row:hover .semi-table-cell-fixed-right,
+.semi-table-row:hover td[style*="sticky"],
+.semi-table-row:hover .semi-table-row-cell[style*="position"] {
   background: var(--theme-hover-bg) !important;
 }
 
