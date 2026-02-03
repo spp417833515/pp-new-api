@@ -716,7 +716,11 @@ code {
 }
 
 /* ==================== 表格样式 ==================== */
+/* 关键修复: 在表格容器上重新定义 --semi-color-bg-1 变量 */
+/* Semi-UI 固定列使用内联样式 background: var(--semi-color-bg-1) */
+/* 通过在表格上设置这个变量，内联样式会使用我们的值 */
 .semi-table {
+  --semi-color-bg-1: #252538 !important;
   border-radius: var(--theme-radius-lg) !important;
   overflow: hidden;
   border: 1px solid var(--theme-glass-border) !important;
@@ -757,28 +761,30 @@ code {
   background: transparent !important;
 }
 
-/* 表格固定列背景 (操作列) - 覆盖所有可能的选择器 */
-.semi-table-row-cell[style*="position"],
-.semi-table-row-head[style*="position"],
-td[style*="sticky"],
-th[style*="sticky"],
-.semi-table-cell-fixed,
+/* ============================================================ */
+/* 表格固定列背景修复 - 核心方案                                    */
+/* ============================================================ */
+/* 问题: Semi-UI 在固定列上设置内联样式 style="background: var(--semi-color-bg-1)" */
+/* CSS !important 无法覆盖内联样式，但可以覆盖 CSS 变量的值 */
+/* 解决: 在固定列单元格上重新定义 --semi-color-bg-1 变量 */
+/* ============================================================ */
+
+/* 核心修复: 在固定列单元格上设置 CSS 变量，内联样式会使用这个值 */
 .semi-table-cell-fixed-left,
 .semi-table-cell-fixed-right,
 .semi-table-cell-fixed-left-last,
 .semi-table-cell-fixed-right-first,
-.semi-table-row-cell.semi-table-cell-fixed,
-.semi-table-row-head.semi-table-cell-fixed {
-  background: var(--theme-bg-elevated) !important;
+[class*="semi-table-cell-fixed"] {
+  --semi-color-bg-1: #252538 !important;
 }
 
-/* 固定列悬停状态 */
-.semi-table-row:hover .semi-table-cell-fixed,
-.semi-table-row:hover .semi-table-cell-fixed-left,
-.semi-table-row:hover .semi-table-cell-fixed-right,
-.semi-table-row:hover td[style*="sticky"],
-.semi-table-row:hover .semi-table-row-cell[style*="position"] {
-  background: var(--theme-hover-bg) !important;
+/* 悬停状态: 修改变量值实现悬停效果 */
+.semi-table-tbody > .semi-table-row:hover > .semi-table-cell-fixed-left,
+.semi-table-tbody > .semi-table-row:hover > .semi-table-cell-fixed-right,
+.semi-table-tbody > .semi-table-row:hover > .semi-table-cell-fixed-left-last,
+.semi-table-tbody > .semi-table-row:hover > .semi-table-cell-fixed-right-first,
+.semi-table-tbody > .semi-table-row:hover > [class*="semi-table-cell-fixed"] {
+  --semi-color-bg-1: rgba(50, 52, 70, 1) !important;
 }
 
 .semi-table-tbody > .semi-table-row:last-child > .semi-table-row-cell {

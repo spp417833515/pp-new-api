@@ -819,3 +819,23 @@ export const resetPricingFilters = ({
   setFilterTag?.(DEFAULT_PRICING_FILTERS.filterTag);
   setCurrentPage?.(DEFAULT_PRICING_FILTERS.currentPage);
 };
+
+/**
+ * 表格固定列背景色配置
+ * 用于覆盖 Semi-UI 表格固定列的默认黑色背景
+ */
+export const FIXED_COLUMN_BG = '#252538';
+export const FIXED_COLUMN_HOVER_BG = 'rgba(255, 255, 255, 0.1)';
+
+/**
+ * 获取固定列的单元格样式配置
+ * @returns {Object} onCell 和 onHeaderCell 配置
+ */
+export const getFixedColumnStyle = () => ({
+  onCell: () => ({
+    style: { background: FIXED_COLUMN_BG },
+  }),
+  onHeaderCell: () => ({
+    style: { background: FIXED_COLUMN_BG },
+  }),
+});

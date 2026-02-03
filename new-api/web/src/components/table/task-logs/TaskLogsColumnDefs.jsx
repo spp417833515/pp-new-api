@@ -19,6 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import { Progress, Tag, Typography } from '@douyinfe/semi-ui';
+import { getFixedColumnStyle } from '../../../helpers';
 import {
   Music,
   FileText,
@@ -360,6 +361,7 @@ export const getTaskLogsColumns = ({
       title: t('详情'),
       dataIndex: 'fail_reason',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       render: (text, record, index) => {
         // 仅当为视频生成任务且成功，且 fail_reason 是 URL 时显示可点击链接
         const isVideoTask =

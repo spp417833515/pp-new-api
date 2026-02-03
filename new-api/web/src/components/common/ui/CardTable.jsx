@@ -32,6 +32,7 @@ import { IconChevronDown, IconChevronUp } from '@douyinfe/semi-icons';
 import PropTypes from 'prop-types';
 import { useIsMobile } from '../../../hooks/common/useIsMobile';
 import { useMinimumLoadingTime } from '../../../hooks/common/useMinimumLoadingTime';
+import { FIXED_COLUMN_BG } from '../../../helpers';
 
 /**
  * CardTable 响应式表格组件
@@ -62,9 +63,39 @@ const CardTable = ({
       ? { ...tableProps, pagination: false }
       : tableProps;
 
+    // 为固定列添加背景色，覆盖 Semi-UI 默认黑色
+    const processedColumns = columns.map((col) => {
+      if (col.fixed) {
+        return {
+          ...col,
+          onCell: (record, index) => {
+            const originalOnCell = col.onCell ? col.onCell(record, index) : {};
+            return {
+              ...originalOnCell,
+              style: {
+                ...originalOnCell?.style,
+                background: FIXED_COLUMN_BG,
+              },
+            };
+          },
+          onHeaderCell: (column) => {
+            const originalOnHeaderCell = col.onHeaderCell ? col.onHeaderCell(column) : {};
+            return {
+              ...originalOnHeaderCell,
+              style: {
+                ...originalOnHeaderCell?.style,
+                background: FIXED_COLUMN_BG,
+              },
+            };
+          },
+        };
+      }
+      return col;
+    });
+
     return (
       <Table
-        columns={columns}
+        columns={processedColumns}
         dataSource={dataSource}
         loading={loading}
         rowKey={rowKey}

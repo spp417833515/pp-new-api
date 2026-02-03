@@ -37,6 +37,7 @@ import {
   renderQuotaWithAmount,
   showSuccess,
   showError,
+  getFixedColumnStyle,
 } from '../../../helpers';
 import { CHANNEL_OPTIONS } from '../../../constants';
 import {
@@ -581,6 +582,7 @@ export const getChannelsColumns = ({
       title: '',
       dataIndex: 'operate',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       render: (text, record, index) => {
         if (record.children === undefined) {
           const moreMenuItems = [

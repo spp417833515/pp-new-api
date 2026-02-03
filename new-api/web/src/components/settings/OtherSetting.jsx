@@ -27,7 +27,7 @@ import {
   Space,
   Card,
 } from '@douyinfe/semi-ui';
-import { API, showError, showSuccess, timestamp2string } from '../../helpers';
+import { API, showError, showSuccess, showInfo, timestamp2string } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { StatusContext } from '../../context/Status';
 import { UserContext } from '../../context/User';
@@ -41,7 +41,7 @@ const OtherSetting = () => {
   const { t } = useTranslation();
   const [userState] = useContext(UserContext);
   const isAdmin = userState?.user?.role >= 10;
-  const { loading: updateLoading, checkUpdate: checkUpdateHook } = useUpdateCheck(isAdmin);
+  const { loading: updateLoading, checkUpdate: checkUpdateHook, updateInfo, executeUpdate, updating } = useUpdateCheck(isAdmin);
 
   let [inputs, setInputs] = useState({
     Notice: '',
@@ -269,19 +269,53 @@ const OtherSetting = () => {
           <Card>
             <Form.Section text={t('系统信息')}>
               <Row>
-                <Col span={16}>
-                  <Space>
-                    <Text>
-                      {t('当前版本')}：
-                      {statusState?.status?.version || t('未知')}
-                    </Text>
-                    <Button
-                      type='primary'
-                      onClick={() => checkUpdateHook(true)}
-                      loading={updateLoading}
-                    >
-                      {t('检查更新')}
-                    </Button>
+                <Col span={24}>
+                  <Space vertical align="start" spacing="tight">
+                    <Space>
+                      <Text>
+                        {t('当前版本')}：
+                        {statusState?.status?.version || t('未知')}
+                      </Text>
+                      <Button
+                        type='primary'
+                        onClick={async () => {
+                          const result = await checkUpdateHook(true);
+                          if (result) {
+                            if (result.has_update) {
+                              showSuccess(t('发现新版本') + ': ' + result.latest_version);
+                            } else {
+                              showInfo(t('已是最新版本'));
+                            }
+                          } else {
+                            showError(t('检查更新失败'));
+                          }
+                        }}
+                        loading={updateLoading}
+                      >
+                        {t('检查更新')}
+                      </Button>
+                    </Space>
+                    {updateInfo?.has_update && (
+                      <Space>
+                        <Text type="success">
+                          {t('最新版本')}：{updateInfo.latest_version}
+                        </Text>
+                        <Button
+                          type='warning'
+                          onClick={async () => {
+                            const result = await executeUpdate();
+                            if (result.success) {
+                              showSuccess(result.message || t('更新成功，服务将在2秒后重启'));
+                            } else {
+                              showError(result.message || t('更新失败'));
+                            }
+                          }}
+                          loading={updating}
+                        >
+                          {updating ? t('更新中...') : t('立即更新')}
+                        </Button>
+                      </Space>
+                    )}
                   </Space>
                 </Col>
               </Row>

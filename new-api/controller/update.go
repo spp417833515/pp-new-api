@@ -1,17 +1,29 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/QuantumNous/new-api/common"
 	"github.com/gin-gonic/gin"
+)
+
+// 版本缓存，避免频繁请求 Docker Hub API
+var (
+	versionCache      string
+	versionCacheTime  time.Time
+	versionCacheMutex sync.RWMutex
+	versionCacheTTL   = 5 * time.Minute
 )
 
 // CheckUpdate 检查是否有新版本
@@ -150,8 +162,96 @@ func RollbackUpdate(c *gin.Context) {
 	})
 }
 
-// getLatestVersion 从 Docker Hub 获取最新版本
+// getLatestVersion 从 Docker Hub API 获取最新版本（带缓存）
 func getLatestVersion() (string, error) {
+	// 检查缓存
+	versionCacheMutex.RLock()
+	if versionCache != "" && time.Since(versionCacheTime) < versionCacheTTL {
+		cached := versionCache
+		versionCacheMutex.RUnlock()
+		return cached, nil
+	}
+	versionCacheMutex.RUnlock()
+
+	// 主方案：从 Docker Hub API 获取
+	version, err := getLatestVersionFromDockerHubAPI()
+	if err == nil && version != "" {
+		// 更新缓存
+		versionCacheMutex.Lock()
+		versionCache = version
+		versionCacheTime = time.Now()
+		versionCacheMutex.Unlock()
+		return version, nil
+	}
+
+	// Fallback：使用原有 docker pull 方案
+	common.SysLog(fmt.Sprintf("Docker Hub API 获取版本失败，使用 fallback: %v", err))
+	return getLatestVersionFromDocker()
+}
+
+// getLatestVersionFromDockerHubAPI 从 Docker Hub API 获取最新版本
+func getLatestVersionFromDockerHubAPI() (string, error) {
+	// 解析镜像名称 (格式: user/repo 或 repo)
+	imageParts := strings.Split(common.DockerImage, "/")
+	var apiURL string
+	if len(imageParts) == 2 {
+		// user/repo 格式
+		apiURL = fmt.Sprintf("https://hub.docker.com/v2/repositories/%s/%s/tags?page_size=100&ordering=last_updated", imageParts[0], imageParts[1])
+	} else {
+		// 官方镜像格式
+		apiURL = fmt.Sprintf("https://hub.docker.com/v2/repositories/library/%s/tags?page_size=100&ordering=last_updated", common.DockerImage)
+	}
+
+	// 发送 HTTP 请求
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Get(apiURL)
+	if err != nil {
+		return "", fmt.Errorf("请求 Docker Hub API 失败: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("Docker Hub API 返回错误状态码: %d", resp.StatusCode)
+	}
+
+	// 解析响应
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("读取响应失败: %v", err)
+	}
+
+	var result struct {
+		Results []struct {
+			Name string `json:"name"`
+		} `json:"results"`
+	}
+	if err := json.Unmarshal(body, &result); err != nil {
+		return "", fmt.Errorf("解析 JSON 失败: %v", err)
+	}
+
+	// 筛选版本号格式的 tag (v*.*.* 或 *.*.*)
+	versionRegex := regexp.MustCompile(`^v?\d+\.\d+\.\d+$`)
+	var versions []string
+	for _, tag := range result.Results {
+		if versionRegex.MatchString(tag.Name) {
+			versions = append(versions, tag.Name)
+		}
+	}
+
+	if len(versions) == 0 {
+		return "", fmt.Errorf("未找到有效的版本号 tag")
+	}
+
+	// 排序，取最新版本
+	sort.Slice(versions, func(i, j int) bool {
+		return compareVersions(versions[i], versions[j]) > 0
+	})
+
+	return versions[0], nil
+}
+
+// getLatestVersionFromDocker 使用 docker pull 获取最新版本（fallback）
+func getLatestVersionFromDocker() (string, error) {
 	image := common.DockerImage + ":latest"
 
 	// 先拉取最新镜像
@@ -185,6 +285,14 @@ func performUpdate() error {
 	image := common.DockerImage + ":latest"
 	tempContainer := "pp-new-api-update-temp"
 
+	// 0. 拉取最新镜像（关键步骤：确保获取最新版本而非本地缓存）
+	common.SysLog(fmt.Sprintf("正在拉取最新镜像: %s", image))
+	pullCmd := exec.Command("docker", "pull", image)
+	if output, err := pullCmd.CombinedOutput(); err != nil {
+		return fmt.Errorf("拉取最新镜像失败: %v, output: %s", err, string(output))
+	}
+	common.SysLog("镜像拉取完成")
+
 	// 1. 创建临时容器
 	createCmd := exec.Command("docker", "create", "--name", tempContainer, image)
 	if err := createCmd.Run(); err != nil {
@@ -195,7 +303,7 @@ func performUpdate() error {
 	// 2. 提取新二进制文件
 	binPath := getBinaryPath()
 	newBinPath := binPath + ".new"
-	cpBinCmd := exec.Command("docker", "cp", tempContainer+":/app/new-api", newBinPath)
+	cpBinCmd := exec.Command("docker", "cp", tempContainer+":/app/bin/new-api", newBinPath)
 	if err := cpBinCmd.Run(); err != nil {
 		return fmt.Errorf("提取二进制文件失败: %v", err)
 	}
@@ -297,7 +405,7 @@ func isRunningInDocker() bool {
 func getBinaryPath() string {
 	exe, err := os.Executable()
 	if err != nil {
-		return "/app/new-api"
+		return "/app/bin/new-api"
 	}
 	return exe
 }

@@ -34,7 +34,7 @@ import {
   IllustrationNoResultDark,
 } from '@douyinfe/semi-illustrations';
 import { Plus, Edit, Trash2, Save, Activity } from 'lucide-react';
-import { API, showError, showSuccess } from '../../../helpers';
+import { API, showError, showSuccess, getFixedColumnStyle } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
@@ -112,6 +112,7 @@ const SettingsUptimeKuma = ({ options, refresh }) => {
       title: t('操作'),
       key: 'action',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       width: 150,
       render: (text, record) => (
         <Space>

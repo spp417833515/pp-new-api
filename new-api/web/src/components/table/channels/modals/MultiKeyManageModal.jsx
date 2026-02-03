@@ -46,6 +46,7 @@ import {
   showError,
   showSuccess,
   timestamp2string,
+  getFixedColumnStyle,
 } from '../../../../helpers';
 
 const { Text } = Typography;
@@ -410,6 +411,7 @@ const MultiKeyManageModal = ({ visible, onCancel, channel, onRefresh }) => {
       title: t('操作'),
       key: 'action',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       width: 150,
       render: (_, record) => (
         <Space>

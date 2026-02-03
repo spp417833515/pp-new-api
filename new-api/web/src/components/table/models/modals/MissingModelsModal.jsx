@@ -32,7 +32,7 @@ import {
   IllustrationNoResultDark,
 } from '@douyinfe/semi-illustrations';
 import { IconSearch } from '@douyinfe/semi-icons';
-import { API, showError } from '../../../../helpers';
+import { API, showError, getFixedColumnStyle } from '../../../../helpers';
 import { MODEL_TABLE_PAGE_SIZE } from '../../../../constants';
 import { useIsMobile } from '../../../../hooks/common/useIsMobile';
 
@@ -96,6 +96,7 @@ const MissingModelsModal = ({ visible, onClose, onConfigureModel, t }) => {
       title: '',
       dataIndex: 'operate',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       width: 120,
       render: (text, record) => (
         <Button

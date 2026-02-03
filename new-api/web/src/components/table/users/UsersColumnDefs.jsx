@@ -29,7 +29,7 @@ import {
   Dropdown,
 } from '@douyinfe/semi-ui';
 import { IconMore } from '@douyinfe/semi-icons';
-import { renderGroup, renderNumber, renderQuota } from '../../../helpers';
+import { renderGroup, renderNumber, renderQuota, getFixedColumnStyle } from '../../../helpers';
 
 /**
  * Render user role
@@ -344,6 +344,7 @@ export const getUsersColumns = ({
       title: '',
       dataIndex: 'operate',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       width: 200,
       render: (text, record, index) =>
         renderOperations(text, record, {

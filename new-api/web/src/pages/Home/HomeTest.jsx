@@ -1,43 +1,16 @@
 /*
-Copyright (C) 2025 QuantumNous
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
-
-For commercial licensing, please contact support@quantumnous.com
+科幻星空主页测试版 v2
+- 动态漂移星空背景
+- 鼠标一度连接点效果（鼠标为中心，周围点连接到鼠标）
 */
 
-import React, { useContext, useEffect, useState, useRef } from 'react';
-import {
-  Button,
-  Typography,
-  Input,
-  Space,
-} from '@douyinfe/semi-ui';
-import { API, showError, copy, showSuccess } from '../../helpers';
-import { useIsMobile } from '../../hooks/common/useIsMobile';
-import { StatusContext } from '../../context/Status';
-import { useActualTheme } from '../../context/Theme';
-import { marked } from 'marked';
+import React, { useEffect, useRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  IconGithubLogo,
-  IconFile,
-  IconCopy,
-  IconBookStroked,
-} from '@douyinfe/semi-icons';
-import { Link, useNavigate } from 'react-router-dom';
-import NoticeModal from '../../components/layout/NoticeModal';
+import { useNavigate } from 'react-router-dom';
+import { Button, Typography, Space, Input } from '@douyinfe/semi-ui';
+import { IconCopy, IconBookStroked } from '@douyinfe/semi-icons';
+import { StatusContext } from '../../context/Status';
+import { copy, showSuccess } from '../../helpers';
 import {
   OpenAI, Claude, Gemini, Moonshot, Zhipu, Qwen, DeepSeek, Minimax,
   Wenxin, Spark, Midjourney, Hunyuan, Cohere, Cloudflare, Ai360, Yi,
@@ -82,13 +55,14 @@ const StarfieldCanvas = () => {
           opacity: Math.random() * 0.8 + 0.2,
           twinkleSpeed: Math.random() * 0.02 + 0.01,
           twinklePhase: Math.random() * Math.PI * 2,
+          // 漂移速度
           vx: (Math.random() - 0.5) * 0.15,
           vy: (Math.random() - 0.5) * 0.15,
         });
       }
     };
 
-    // 初始化连接节点
+    // 初始化连接节点（静态分布，用于鼠标连接）
     const initNodes = () => {
       nodesRef.current = [];
       const nodeCount = 80;
@@ -97,12 +71,14 @@ const StarfieldCanvas = () => {
           x: Math.random() * width,
           y: Math.random() * height,
           size: Math.random() * 2 + 1.5,
+          // 缓慢漂移
           vx: (Math.random() - 0.5) * 0.3,
           vy: (Math.random() - 0.5) * 0.3,
         });
       }
     };
 
+    // 鼠标移动事件
     const handleMouseMove = (e) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
@@ -111,10 +87,11 @@ const StarfieldCanvas = () => {
       mouseRef.current = { x: -1000, y: -1000 };
     };
 
+    // 动画循环
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // 深空渐变背景
+      // 绘制深空渐变背景
       const gradient = ctx.createLinearGradient(0, 0, 0, height);
       gradient.addColorStop(0, '#0a0a1a');
       gradient.addColorStop(0.5, '#0f0f2a');
@@ -122,31 +99,23 @@ const StarfieldCanvas = () => {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
-      // 星云效果
-      const nebula1 = ctx.createRadialGradient(width * 0.2, height * 0.3, 0, width * 0.2, height * 0.3, width * 0.4);
-      nebula1.addColorStop(0, 'rgba(100, 50, 150, 0.1)');
-      nebula1.addColorStop(0.5, 'rgba(80, 40, 120, 0.05)');
-      nebula1.addColorStop(1, 'rgba(60, 30, 90, 0)');
-      ctx.fillStyle = nebula1;
-      ctx.fillRect(0, 0, width, height);
+      // 绘制星云效果
+      drawNebula(ctx, width, height);
 
-      const nebula2 = ctx.createRadialGradient(width * 0.8, height * 0.7, 0, width * 0.8, height * 0.7, width * 0.3);
-      nebula2.addColorStop(0, 'rgba(0, 150, 200, 0.08)');
-      nebula2.addColorStop(0.5, 'rgba(0, 120, 160, 0.04)');
-      nebula2.addColorStop(1, 'rgba(0, 90, 120, 0)');
-      ctx.fillStyle = nebula2;
-      ctx.fillRect(0, 0, width, height);
-
-      // 绘制星星
+      // 更新和绘制星星（漂移）
       const time = Date.now() * 0.001;
       starsRef.current.forEach((star) => {
+        // 更新位置（漂移）
         star.x += star.vx;
         star.y += star.vy;
+
+        // 边界循环
         if (star.x < 0) star.x = width;
         if (star.x > width) star.x = 0;
         if (star.y < 0) star.y = height;
         if (star.y > height) star.y = 0;
 
+        // 闪烁效果
         const twinkle = Math.sin(time * star.twinkleSpeed * 10 + star.twinklePhase) * 0.3 + 0.7;
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
@@ -154,35 +123,40 @@ const StarfieldCanvas = () => {
         ctx.fill();
       });
 
-      // 更新节点位置
+      // 更新节点位置（缓慢漂移）
       nodesRef.current.forEach((node) => {
         node.x += node.vx;
         node.y += node.vy;
+
+        // 边界循环
         if (node.x < 0) node.x = width;
         if (node.x > width) node.x = 0;
         if (node.y < 0) node.y = height;
         if (node.y > height) node.y = 0;
       });
 
-      // 鼠标一度连接效果
+      // 绘制鼠标一度连接效果
       const mouse = mouseRef.current;
-      const connectionRadius = 180;
+      const connectionRadius = 180; // 连接半径
 
+      // 找出鼠标范围内的节点
       const nearbyNodes = nodesRef.current.filter((node) => {
         const dx = mouse.x - node.x;
         const dy = mouse.y - node.y;
         return Math.sqrt(dx * dx + dy * dy) < connectionRadius;
       });
 
-      // 节点之间连线
+      // 绘制节点之间的连线（在鼠标范围内的节点互相连接）
       nearbyNodes.forEach((node, i) => {
         nearbyNodes.forEach((other, j) => {
           if (i >= j) return;
           const lineDx = node.x - other.x;
           const lineDy = node.y - other.y;
           const lineDist = Math.sqrt(lineDx * lineDx + lineDy * lineDy);
-          if (lineDist < 120) {
-            const opacity = (1 - lineDist / 120) * 0.4;
+          const maxLineDist = 120;
+
+          if (lineDist < maxLineDist) {
+            const opacity = (1 - lineDist / maxLineDist) * 0.4;
             ctx.beginPath();
             ctx.moveTo(node.x, node.y);
             ctx.lineTo(other.x, other.y);
@@ -193,12 +167,14 @@ const StarfieldCanvas = () => {
         });
       });
 
-      // 鼠标到节点连线
+      // 绘制鼠标到节点的连线
       nearbyNodes.forEach((node) => {
         const dx = mouse.x - node.x;
         const dy = mouse.y - node.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         const opacity = (1 - dist / connectionRadius) * 0.6;
+
+        // 连线到鼠标
         ctx.beginPath();
         ctx.moveTo(mouse.x, mouse.y);
         ctx.lineTo(node.x, node.y);
@@ -207,7 +183,7 @@ const StarfieldCanvas = () => {
         ctx.stroke();
       });
 
-      // 绘制节点
+      // 绘制所有节点
       nodesRef.current.forEach((node) => {
         const dx = mouse.x - node.x;
         const dy = mouse.y - node.y;
@@ -216,6 +192,7 @@ const StarfieldCanvas = () => {
         const nodeOpacity = isNearby ? 0.9 : 0.3;
         const nodeSize = isNearby ? node.size * 1.5 : node.size;
 
+        // 外圈光晕（仅在鼠标附近时显示）
         if (isNearby) {
           const glowGradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, nodeSize * 4);
           glowGradient.addColorStop(0, `rgba(0, 255, 136, ${nodeOpacity * 0.4})`);
@@ -226,6 +203,7 @@ const StarfieldCanvas = () => {
           ctx.fill();
         }
 
+        // 节点核心
         ctx.beginPath();
         ctx.arc(node.x, node.y, nodeSize, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(0, 255, 136, ${nodeOpacity})`;
@@ -235,8 +213,9 @@ const StarfieldCanvas = () => {
         ctx.stroke();
       });
 
-      // 鼠标中心点
+      // 绘制鼠标中心点
       if (mouse.x > 0 && mouse.y > 0) {
+        // 外圈光晕
         const mouseGlow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 30);
         mouseGlow.addColorStop(0, 'rgba(0, 255, 136, 0.4)');
         mouseGlow.addColorStop(1, 'rgba(0, 255, 136, 0)');
@@ -245,6 +224,7 @@ const StarfieldCanvas = () => {
         ctx.fillStyle = mouseGlow;
         ctx.fill();
 
+        // 中心点
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, 5, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(0, 255, 136, 0.9)';
@@ -257,6 +237,25 @@ const StarfieldCanvas = () => {
       animationRef.current = requestAnimationFrame(animate);
     };
 
+    // 绘制星云
+    const drawNebula = (ctx, w, h) => {
+      // 紫色星云
+      const nebula1 = ctx.createRadialGradient(w * 0.2, h * 0.3, 0, w * 0.2, h * 0.3, w * 0.4);
+      nebula1.addColorStop(0, 'rgba(100, 50, 150, 0.1)');
+      nebula1.addColorStop(0.5, 'rgba(80, 40, 120, 0.05)');
+      nebula1.addColorStop(1, 'rgba(60, 30, 90, 0)');
+      ctx.fillStyle = nebula1;
+      ctx.fillRect(0, 0, w, h);
+
+      // 青色星云
+      const nebula2 = ctx.createRadialGradient(w * 0.8, h * 0.7, 0, w * 0.8, h * 0.7, w * 0.3);
+      nebula2.addColorStop(0, 'rgba(0, 150, 200, 0.08)');
+      nebula2.addColorStop(0.5, 'rgba(0, 120, 160, 0.04)');
+      nebula2.addColorStop(1, 'rgba(0, 90, 120, 0)');
+      ctx.fillStyle = nebula2;
+      ctx.fillRect(0, 0, w, h);
+    };
+
     resize();
     window.addEventListener('resize', resize);
     window.addEventListener('mousemove', handleMouseMove);
@@ -267,7 +266,9 @@ const StarfieldCanvas = () => {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
     };
   }, []);
 
@@ -314,20 +315,26 @@ const ProviderIcons = () => {
   );
 };
 
-// 科幻星空主页内容
-const StarfieldHome = ({ statusState, serverAddress, t, navigate, isMobile }) => {
+const HomeTest = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [statusState] = useContext(StatusContext);
+  const serverAddress = statusState?.status?.server_address || window.location.origin;
+
   const handleCopyBaseUrl = () => {
     copy(serverAddress + '/v1');
     showSuccess(t('已复制到剪贴板'));
   };
 
-  const isDemoSiteMode = statusState?.status?.demo_site_enabled || false;
-  const docsLink = statusState?.status?.docs_link || '';
-
   return (
     <div className="relative min-h-screen overflow-hidden">
+      {/* 星空背景 */}
       <StarfieldCanvas />
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16">
+
+      {/* 内容层 */}
+      <div
+        className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16"
+      >
         {/* 主标题 */}
         <div className="text-center mb-8">
           <Title
@@ -388,55 +395,35 @@ const StarfieldHome = ({ statusState, serverAddress, t, navigate, isMobile }) =>
 
         {/* 操作按钮 */}
         <Space spacing="loose" className="mb-12">
-          <Link to="/console">
-            <Button
-              theme="solid"
-              size={isMobile ? 'default' : 'large'}
-              className="!px-8 !py-3 !rounded-xl !font-semibold"
-              style={{
-                background: 'linear-gradient(135deg, #00ff88, #00d9ff)',
-                border: 'none',
-                color: '#0a0a1a',
-                boxShadow: '0 0 30px rgba(0, 255, 136, 0.4)',
-              }}
-            >
-              {t('获取密钥')}
-            </Button>
-          </Link>
-          {isDemoSiteMode && statusState?.status?.version ? (
-            <Button
-              size={isMobile ? 'default' : 'large'}
-              icon={<IconGithubLogo />}
-              onClick={() => window.open('https://github.com/QuantumNous/new-api', '_blank')}
-              className="!px-8 !py-3 !rounded-xl !font-semibold"
-              style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                color: '#ffffff',
-              }}
-            >
-              {statusState.status.version}
-            </Button>
-          ) : (
-            docsLink && (
-              <Button
-                theme="light"
-                size={isMobile ? 'default' : 'large'}
-                icon={<IconBookStroked />}
-                onClick={() => window.open(docsLink, '_blank')}
-                className="!px-8 !py-3 !rounded-xl !font-semibold"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  color: '#ffffff',
-                }}
-              >
-                {t('查看文档')}
-              </Button>
-            )
-          )}
+          <Button
+            theme="solid"
+            size="large"
+            onClick={() => navigate('/token')}
+            className="!px-8 !py-3 !rounded-xl !font-semibold"
+            style={{
+              background: 'linear-gradient(135deg, #00ff88, #00d9ff)',
+              border: 'none',
+              color: '#0a0a1a',
+              boxShadow: '0 0 30px rgba(0, 255, 136, 0.4)',
+            }}
+          >
+            {t('获取密钥')}
+          </Button>
+          <Button
+            theme="light"
+            size="large"
+            icon={<IconBookStroked />}
+            onClick={() => window.open(statusState?.status?.docs_link || 'https://docs.newapi.pro', '_blank')}
+            className="!px-8 !py-3 !rounded-xl !font-semibold"
+            style={{
+              background: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              color: '#ffffff',
+            }}
+          >
+            {t('查看文档')}
+          </Button>
         </Space>
 
         {/* 供应商图标 */}
@@ -454,100 +441,4 @@ const StarfieldHome = ({ statusState, serverAddress, t, navigate, isMobile }) =>
   );
 };
 
-const Home = () => {
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
-  const [statusState] = useContext(StatusContext);
-  const actualTheme = useActualTheme();
-  const [homePageContentLoaded, setHomePageContentLoaded] = useState(false);
-  const [homePageContent, setHomePageContent] = useState('');
-  const [noticeVisible, setNoticeVisible] = useState(false);
-  const isMobile = useIsMobile();
-  const serverAddress = statusState?.status?.server_address || `${window.location.origin}`;
-
-  const displayHomePageContent = async () => {
-    setHomePageContent(localStorage.getItem('home_page_content') || '');
-    const res = await API.get('/api/home_page_content');
-    const { success, message, data } = res.data;
-    if (success) {
-      let content = data;
-      if (!data.startsWith('https://')) {
-        content = marked.parse(data);
-      }
-      setHomePageContent(content);
-      localStorage.setItem('home_page_content', content);
-
-      if (data.startsWith('https://')) {
-        const iframe = document.querySelector('iframe');
-        if (iframe) {
-          iframe.onload = () => {
-            iframe.contentWindow.postMessage({ themeMode: actualTheme }, '*');
-            iframe.contentWindow.postMessage({ lang: i18n.language }, '*');
-          };
-        }
-      }
-    } else {
-      showError(message);
-      setHomePageContent('加载首页内容失败...');
-    }
-    setHomePageContentLoaded(true);
-  };
-
-  useEffect(() => {
-    const checkNoticeAndShow = async () => {
-      const lastCloseDate = localStorage.getItem('notice_close_date');
-      const today = new Date().toDateString();
-      if (lastCloseDate !== today) {
-        try {
-          const res = await API.get('/api/notice');
-          const { success, data } = res.data;
-          if (success && data && data.trim() !== '') {
-            setNoticeVisible(true);
-          }
-        } catch (error) {
-          console.error('获取公告失败:', error);
-        }
-      }
-    };
-    checkNoticeAndShow();
-  }, []);
-
-  useEffect(() => {
-    displayHomePageContent().then();
-  }, []);
-
-  return (
-    <div className='w-full overflow-x-hidden'>
-      <NoticeModal
-        visible={noticeVisible}
-        onClose={() => setNoticeVisible(false)}
-        isMobile={isMobile}
-      />
-      {homePageContentLoaded && homePageContent === '' ? (
-        <StarfieldHome
-          statusState={statusState}
-          serverAddress={serverAddress}
-          t={t}
-          navigate={navigate}
-          isMobile={isMobile}
-        />
-      ) : (
-        <div className='overflow-x-hidden w-full'>
-          {homePageContent.startsWith('https://') ? (
-            <iframe
-              src={homePageContent}
-              className='w-full h-screen border-none'
-            />
-          ) : (
-            <div
-              className='mt-[60px]'
-              dangerouslySetInnerHTML={{ __html: homePageContent }}
-            />
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Home;
+export default HomeTest;

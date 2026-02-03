@@ -34,6 +34,7 @@ import {
   Tag,
 } from '@douyinfe/semi-ui';
 import { IconSearch } from '@douyinfe/semi-icons';
+import { getFixedColumnStyle } from '../../helpers';
 
 const ChannelSelectorModal = forwardRef(
   (
@@ -234,6 +235,7 @@ const ChannelSelectorModal = forwardRef(
         title: t('同步接口'),
         dataIndex: 'endpoint',
         fixed: 'right',
+        ...getFixedColumnStyle(),
         render: renderEndpointCell,
       },
     ];

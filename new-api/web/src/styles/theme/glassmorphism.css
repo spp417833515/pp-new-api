@@ -175,3 +175,23 @@
   /* 聚焦 */
   --semi-color-focus-border: var(--theme-focus-border);
 }
+
+/* ==================== 强制覆盖 Semi-UI 暗色主题 ==================== */
+/* 使用更高优先级选择器覆盖 Semi-UI 暗色主题的变量 */
+body,
+body[theme-mode="dark"],
+body[theme-mode=dark],
+body .semi-always-dark,
+:host,
+:host .semi-always-dark,
+:host([theme-mode=dark]) {
+  --semi-color-bg-0: #1a1a1a !important;
+  --semi-color-bg-1: #252538 !important;
+  --semi-color-bg-2: rgba(255, 255, 255, 0.04) !important;
+  --semi-color-bg-3: rgba(255, 255, 255, 0.06) !important;
+  --semi-color-bg-4: rgba(255, 255, 255, 0.08) !important;
+  --semi-color-fill-0: rgba(255, 255, 255, 0.06) !important;
+  --semi-color-fill-1: rgba(255, 255, 255, 0.1) !important;
+  --semi-color-fill-2: rgba(255, 255, 255, 0.12) !important;
+  --semi-color-border: rgba(255, 255, 255, 0.08) !important;
+}

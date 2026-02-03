@@ -40,6 +40,7 @@ import {
   showError,
   showSuccess,
   stringToColor,
+  getFixedColumnStyle,
 } from '../../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useIsMobile } from '../../../../hooks/common/useIsMobile';
@@ -196,6 +197,7 @@ const PrefillGroupManagement = ({ visible, onClose }) => {
       title: '',
       key: 'action',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       width: 140,
       render: (_, record) => (
         <Space>

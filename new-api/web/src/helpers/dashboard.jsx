@@ -101,7 +101,7 @@ export const updateChartSpec = (
 
 export const getTrendSpec = (data, color) => ({
   type: 'line',
-  data: [{ id: 'trend', values: data.map((val, idx) => ({ x: idx, y: val })) }],
+  data: [{ id: 'trend', values: (data || []).map((val, idx) => ({ x: idx, y: val })) }],
   xField: 'x',
   yField: 'y',
   height: 40,
@@ -130,9 +130,7 @@ export const getTrendSpec = (data, color) => ({
   point: {
     visible: false,
   },
-  background: {
-    fill: 'transparent',
-  },
+  background: 'transparent',
 });
 
 // ========== UI 工具函数 ==========

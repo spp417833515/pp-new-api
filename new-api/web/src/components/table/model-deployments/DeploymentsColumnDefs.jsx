@@ -19,7 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import { Button, Dropdown, Tag, Typography } from '@douyinfe/semi-ui';
-import { timestamp2string, showSuccess, showError } from '../../../helpers';
+import { timestamp2string, showSuccess, showError, getFixedColumnStyle } from '../../../helpers';
 import { IconMore } from '@douyinfe/semi-icons';
 import {
   FaPlay,
@@ -451,6 +451,7 @@ export const getDeploymentsColumns = ({
       title: t('操作'),
       key: COLUMN_KEYS.actions,
       fixed: 'right',
+      ...getFixedColumnStyle(),
       width: 120,
       render: (_, record) => {
         const { status, id } = record;

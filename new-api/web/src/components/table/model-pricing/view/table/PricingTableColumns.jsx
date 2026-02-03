@@ -25,6 +25,7 @@ import {
   stringToColor,
   calculateModelPrice,
   getLobeHubIcon,
+  getFixedColumnStyle,
 } from '../../../../../helpers';
 import {
   renderLimitedItems,
@@ -228,7 +229,7 @@ export const getPricingTableColumns = ({
   const priceColumn = {
     title: t('模型价格'),
     dataIndex: 'model_price',
-    ...(isMobile ? {} : { fixed: 'right' }),
+    ...(isMobile ? {} : { fixed: 'right', ...getFixedColumnStyle() }),
     render: (text, record, index) => {
       const priceData = getPriceData(record);
 

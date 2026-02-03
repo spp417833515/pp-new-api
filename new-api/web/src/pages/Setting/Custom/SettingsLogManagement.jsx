@@ -283,7 +283,7 @@ export default function SettingsLogManagement(props) {
                 <Form.InputNumber
                   field={'LogMaxCount'}
                   label={t('最大保留条数')}
-                  min={1000}
+                  min={1}
                   max={10000000}
                   step={10000}
                   disabled={!inputs.LogAutoCleanEnabled}

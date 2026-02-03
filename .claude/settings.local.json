@@ -38,7 +38,20 @@
       "Bash(git stash:*)",
       "Bash(git checkout:*)",
       "Bash(grep:*)",
-      "Bash(npx grep:*)"
+      "Bash(npx grep:*)",
+      "Bash(tasklist:*)",
+      "Bash(cmd /c:*)",
+      "Bash(del:*)",
+      "Bash(go clean:*)",
+      "Bash(docker pull:*)",
+      "Bash(docker run:*)",
+      "Bash(docker images:*)",
+      "Bash(docker stop:*)",
+      "WebFetch(domain:stackoverflow.com)",
+      "WebFetch(domain:www.codegenes.net)",
+      "Bash(npx eslint:*)",
+      "Bash(npx tsc --noEmit src/components/table/tokens/modals/EditTokenModal.jsx)",
+      "WebFetch(domain:semi.design)"
     ]
   }
 }

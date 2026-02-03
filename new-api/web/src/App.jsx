@@ -50,6 +50,7 @@ import Setup from './pages/Setup';
 import SetupCheck from './components/layout/SetupCheck';
 
 const Home = lazy(() => import('./pages/Home'));
+const HomeTest = lazy(() => import('./pages/Home/HomeTest'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const About = lazy(() => import('./pages/About'));
 const UserAgreement = lazy(() => import('./pages/UserAgreement'));
@@ -107,6 +108,14 @@ function App() {
           element={
             <Suspense fallback={<Loading></Loading>} key={location.pathname}>
               <StylePreview />
+            </Suspense>
+          }
+        />
+        <Route
+          path='/home-test'
+          element={
+            <Suspense fallback={<Loading></Loading>} key={location.pathname}>
+              <HomeTest />
             </Suspense>
           }
         />

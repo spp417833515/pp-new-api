@@ -20,7 +20,7 @@ For commercial licensing, please contact support@quantumnous.com
 import React from 'react';
 import { Tag, Button, Space, Popover, Dropdown } from '@douyinfe/semi-ui';
 import { IconMore } from '@douyinfe/semi-icons';
-import { renderQuota, timestamp2string } from '../../../helpers';
+import { renderQuota, timestamp2string, getFixedColumnStyle } from '../../../helpers';
 import {
   REDEMPTION_STATUS,
   REDEMPTION_STATUS_MAP,
@@ -142,6 +142,7 @@ export const getRedemptionsColumns = ({
       title: '',
       dataIndex: 'operate',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       width: 205,
       render: (text, record) => {
         // Create dropdown menu items for more operations

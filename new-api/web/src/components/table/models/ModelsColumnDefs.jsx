@@ -30,6 +30,7 @@ import {
   timestamp2string,
   getLobeHubIcon,
   stringToColor,
+  getFixedColumnStyle,
 } from '../../../helpers';
 import {
   renderLimitedItems,
@@ -365,6 +366,7 @@ export const getModelsColumns = ({
       title: '',
       dataIndex: 'operate',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       render: (text, record, index) =>
         renderOperations(
           text,

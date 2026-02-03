@@ -43,6 +43,7 @@ import {
   showSuccess,
   getRelativeTime,
   formatDateTimeString,
+  getFixedColumnStyle,
 } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -171,6 +172,7 @@ const SettingsAnnouncements = ({ options, refresh }) => {
       title: t('操作'),
       key: 'action',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       width: 150,
       render: (text, record) => (
         <Space>

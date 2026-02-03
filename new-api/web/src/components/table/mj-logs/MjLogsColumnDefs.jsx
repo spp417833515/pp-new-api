@@ -19,6 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import { Button, Progress, Tag, Typography } from '@douyinfe/semi-ui';
+import { getFixedColumnStyle } from '../../../helpers';
 import {
   Palette,
   ZoomIn,
@@ -489,6 +490,7 @@ export const getMjLogsColumns = ({
       title: t('失败原因'),
       dataIndex: 'fail_reason',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       render: (text, record, index) => {
         if (!text) {
           return t('无');

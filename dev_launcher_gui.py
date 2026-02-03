@@ -96,6 +96,7 @@ class DevLauncherGUI:
         ttk.Button(quick_frame, text="全部启动", command=self.start_all, width=12).pack(side=tk.LEFT, padx=5)
         ttk.Button(quick_frame, text="全部停止", command=self.stop_all, width=12).pack(side=tk.LEFT, padx=5)
         ttk.Button(quick_frame, text="全部重启", command=self.restart_all, width=12).pack(side=tk.LEFT, padx=5)
+        ttk.Button(quick_frame, text="强制清理", command=self.force_kill_all, width=12).pack(side=tk.LEFT, padx=5)
         ttk.Button(quick_frame, text="清空日志", command=self.clear_logs, width=12).pack(side=tk.LEFT, padx=5)
         ttk.Button(quick_frame, text="打开浏览器", command=self.open_browser, width=12).pack(side=tk.LEFT, padx=5)
 
@@ -138,12 +139,24 @@ class DevLauncherGUI:
         self.root.after(100, self.process_log_queue)
 
     def stream_output(self, process, name, tag):
+        """实时读取进程输出并显示到日志"""
         try:
-            for line in iter(process.stdout.readline, ''):
+            while process.poll() is None:
+                line = process.stdout.readline()
                 if line:
-                    self.log_queue.put((f"[{name}] {line}", tag))
-        except:
-            pass
+                    # 清理 ANSI 转义序列
+                    import re
+                    clean_line = re.sub(r'\x1b\[[0-9;]*m', '', line)
+                    self.log_queue.put((f"[{name}] {clean_line}", tag))
+            # 读取剩余输出
+            remaining = process.stdout.read()
+            if remaining:
+                import re
+                for line in remaining.splitlines():
+                    clean_line = re.sub(r'\x1b\[[0-9;]*m', '', line)
+                    self.log_queue.put((f"[{name}] {clean_line}\n", tag))
+        except Exception as e:
+            self.log_queue.put((f"[{name}] 日志读取错误: {e}\n", "error"))
 
     def update_status(self, service, running):
         if service == "backend":
@@ -173,12 +186,14 @@ class DevLauncherGUI:
         self.log("正在启动后端服务...", "system")
         try:
             self.processes["backend"] = subprocess.Popen(
-                ["go", "run", "."],
+                ["go", "run", ".", "-port", "3050"],
                 cwd=BACKEND_DIR,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
                 bufsize=1,
+                encoding='utf-8',
+                errors='replace',
                 creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
             )
             thread = threading.Thread(
@@ -207,6 +222,8 @@ class DevLauncherGUI:
                 stderr=subprocess.STDOUT,
                 text=True,
                 bufsize=1,
+                encoding='utf-8',
+                errors='replace',
                 creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
             )
             thread = threading.Thread(
@@ -226,7 +243,11 @@ class DevLauncherGUI:
             self.log("正在停止后端服务...", "system")
             try:
                 if sys.platform == "win32":
+                    # 强制终止进程树
                     subprocess.run(["taskkill", "/F", "/T", "/PID", str(proc.pid)],
+                                   capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+                    # 额外清理可能残留的 go 进程
+                    subprocess.run(["taskkill", "/F", "/IM", "new-api.exe"],
                                    capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
                 else:
                     proc.terminate()
@@ -237,6 +258,12 @@ class DevLauncherGUI:
             self.update_status("backend", False)
             self.log("后端服务已停止", "system")
         else:
+            # 即使进程记录为空，也尝试清理残留进程
+            if sys.platform == "win32":
+                subprocess.run(["taskkill", "/F", "/IM", "new-api.exe"],
+                               capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+            self.processes["backend"] = None
+            self.update_status("backend", False)
             self.log("后端服务未运行", "system")
 
     def stop_frontend(self):
@@ -245,6 +272,7 @@ class DevLauncherGUI:
             self.log("正在停止前端服务...", "system")
             try:
                 if sys.platform == "win32":
+                    # 强制终止进程树
                     subprocess.run(["taskkill", "/F", "/T", "/PID", str(proc.pid)],
                                    capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
                 else:
@@ -256,6 +284,8 @@ class DevLauncherGUI:
             self.update_status("frontend", False)
             self.log("前端服务已停止", "system")
         else:
+            self.processes["frontend"] = None
+            self.update_status("frontend", False)
             self.log("前端服务未运行", "system")
 
     def restart_backend(self):
@@ -281,6 +311,29 @@ class DevLauncherGUI:
 
     def clear_logs(self):
         self.log_text.delete(1.0, tk.END)
+
+    def force_kill_all(self):
+        """强制清理所有相关进程"""
+        self.log("正在强制清理所有进程...", "system")
+        if sys.platform == "win32":
+            # 清理 Go 后端进程
+            subprocess.run(["taskkill", "/F", "/IM", "go.exe"],
+                           capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+            subprocess.run(["taskkill", "/F", "/IM", "new-api.exe"],
+                           capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+            # 清理 Node 前端进程
+            subprocess.run(["taskkill", "/F", "/IM", "node.exe"],
+                           capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+        else:
+            subprocess.run(["pkill", "-f", "go run"], capture_output=True)
+            subprocess.run(["pkill", "-f", "node"], capture_output=True)
+
+        # 重置状态
+        self.processes["backend"] = None
+        self.processes["frontend"] = None
+        self.update_status("backend", False)
+        self.update_status("frontend", False)
+        self.log("所有进程已强制清理", "system")
 
     def open_browser(self):
         import webbrowser

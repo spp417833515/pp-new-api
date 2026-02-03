@@ -39,6 +39,7 @@ import {
   renderQuota,
   getModelCategories,
   showError,
+  getFixedColumnStyle,
 } from '../../../helpers';
 import {
   IconTreeTriangleDown,
@@ -495,6 +496,7 @@ export const getTokensColumns = ({
       title: '',
       dataIndex: 'operate',
       fixed: 'right',
+      ...getFixedColumnStyle(),
       render: (text, record, index) =>
         renderOperations(
           text,

@@ -93,9 +93,9 @@ const StatsCards = ({
                       {t('充值')}
                     </Tag>
                   ) : (
-                    (loading ||
-                      (item.trendData && item.trendData.length > 0)) && (
-                      <div className='w-24 h-10'>
+                    (!loading &&
+                      item.trendData && item.trendData.length > 0) && (
+                      <div className='w-24 h-10 rounded-lg' style={{ border: '1px solid rgba(255, 255, 255, 0.6)' }}>
                         <VChart
                           spec={getTrendSpec(item.trendData, item.trendColor)}
                           option={CHART_CONFIG}

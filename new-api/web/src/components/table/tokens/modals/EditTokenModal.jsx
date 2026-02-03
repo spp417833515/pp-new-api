@@ -24,9 +24,10 @@ import {
   showSuccess,
   timestamp2string,
   renderGroupOption,
-  renderQuotaWithPrompt,
   getModelCategories,
   selectFilter,
+  getQuotaPerUnit,
+  getCurrencyConfig,
 } from '../../../../helpers';
 import { useIsMobile } from '../../../../hooks/common/useIsMobile';
 import {
@@ -64,9 +65,23 @@ const EditTokenModal = (props) => {
   const [groups, setGroups] = useState([]);
   const isEdit = props.editingToken.id !== undefined;
 
+  // 获取货币配置
+  const quotaPerUnit = getQuotaPerUnit() || 500000;
+  const { symbol: currencySymbol } = getCurrencyConfig();
+
+  // 配额转美元显示
+  const quotaToUsd = (quota) => {
+    return parseFloat((quota / quotaPerUnit).toFixed(6));
+  };
+
+  // 美元转配额存储
+  const usdToQuota = (usd) => {
+    return Math.round(usd * quotaPerUnit);
+  };
+
   const getInitValues = () => ({
     name: '',
-    remain_quota: 0,
+    remain_quota_usd: 0,
     expired_time: -1,
     unlimited_quota: true,
     model_limits_enabled: false,
@@ -162,6 +177,8 @@ const EditTokenModal = (props) => {
       } else {
         data.model_limits = [];
       }
+      // 将配额转换为美元显示
+      data.remain_quota_usd = quotaToUsd(data.remain_quota || 0);
       if (formApiRef.current) {
         formApiRef.current.setValues({ ...getInitValues(), ...data });
       }
@@ -208,8 +225,9 @@ const EditTokenModal = (props) => {
   const submit = async (values) => {
     setLoading(true);
     if (isEdit) {
-      let { tokenCount: _tc, ...localInputs } = values;
-      localInputs.remain_quota = parseInt(localInputs.remain_quota);
+      let { tokenCount: _tc, remain_quota_usd, ...localInputs } = values;
+      // 将美元转换为配额存储
+      localInputs.remain_quota = usdToQuota(parseFloat(remain_quota_usd) || 0);
       if (localInputs.expired_time !== -1) {
         let time = Date.parse(localInputs.expired_time);
         if (isNaN(time)) {
@@ -237,7 +255,7 @@ const EditTokenModal = (props) => {
       const count = parseInt(values.tokenCount, 10) || 1;
       let successCount = 0;
       for (let i = 0; i < count; i++) {
-        let { tokenCount: _tc, ...localInputs } = values;
+        let { tokenCount: _tc, remain_quota_usd, ...localInputs } = values;
         const baseName =
           values.name.trim() === '' ? 'default' : values.name.trim();
         if (i !== 0 || values.name.trim() === '') {
@@ -245,7 +263,8 @@ const EditTokenModal = (props) => {
         } else {
           localInputs.name = baseName;
         }
-        localInputs.remain_quota = parseInt(localInputs.remain_quota);
+        // 将美元转换为配额存储
+        localInputs.remain_quota = usdToQuota(parseFloat(remain_quota_usd) || 0);
 
         if (localInputs.expired_time !== -1) {
           let time = Date.parse(localInputs.expired_time);
@@ -484,27 +503,39 @@ const EditTokenModal = (props) => {
                 </div>
                 <Row gutter={12}>
                   <Col span={24}>
-                    <Form.AutoComplete
-                      field='remain_quota'
+                    <Form.InputNumber
+                      field='remain_quota_usd'
                       label={t('额度')}
                       placeholder={t('请输入额度')}
-                      type='number'
+                      prefix={currencySymbol}
                       disabled={values.unlimited_quota}
-                      extraText={renderQuotaWithPrompt(values.remain_quota)}
+                      min={0}
+                      step={1}
                       rules={
                         values.unlimited_quota
                           ? []
                           : [{ required: true, message: t('请输入额度') }]
                       }
-                      data={[
-                        { value: 500000, label: '1$' },
-                        { value: 5000000, label: '10$' },
-                        { value: 25000000, label: '50$' },
-                        { value: 50000000, label: '100$' },
-                        { value: 250000000, label: '500$' },
-                        { value: 500000000, label: '1000$' },
-                      ]}
+                      style={{ width: '100%' }}
                     />
+                  </Col>
+                  <Col span={24}>
+                    <Form.Slot label={t('额度快捷设置')}>
+                      <Space wrap>
+                        {[1, 10, 50, 100, 500, 1000].map((usd) => (
+                          <Button
+                            key={usd}
+                            theme='light'
+                            type='tertiary'
+                            size='small'
+                            disabled={values.unlimited_quota}
+                            onClick={() => formApiRef.current?.setValue('remain_quota_usd', usd)}
+                          >
+                            {currencySymbol}{usd}
+                          </Button>
+                        ))}
+                      </Space>
+                    </Form.Slot>
                   </Col>
                   <Col span={24}>
                     <Form.Switch

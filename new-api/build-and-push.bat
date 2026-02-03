@@ -36,7 +36,7 @@ echo 这可能需要 10-15 分钟，请耐心等待...
 echo (包含前端编译 + Go 编译)
 echo.
 set DOCKER_BUILDKIT=0
-docker build --platform linux/amd64 -t spp417833515/pp-new-api:latest -t spp417833515/pp-new-api:%VERSION% .
+docker build --no-cache --platform linux/amd64 -t spp417833515/pp-new-api:latest -t spp417833515/pp-new-api:%VERSION% .
 
 if %errorlevel% neq 0 (
     echo.

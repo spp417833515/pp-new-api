@@ -413,6 +413,7 @@ func DeleteOldLog(ctx context.Context, targetTimestamp int64, limit int) (int64,
 }
 
 // CleanLogByCount 按数量清理日志，保留最新的 maxCount 条
+// 使用时间戳删除法：找到第 maxCount 条记录的时间戳，删除之前的所有记录
 func CleanLogByCount(maxCount int) (int64, error) {
 	if maxCount <= 0 {
 		return 0, nil
@@ -427,30 +428,25 @@ func CleanLogByCount(maxCount int) (int64, error) {
 		return 0, nil
 	}
 
-	deleteCount := totalCount - int64(maxCount)
-	batchSize := 10000
-	var deleted int64 = 0
-
-	for deleted < deleteCount {
-		currentBatch := batchSize
-		if int64(currentBatch) > deleteCount-deleted {
-			currentBatch = int(deleteCount - deleted)
-		}
-
-		// 使用子查询找到最旧的记录ID并删除
-		subQuery := LOG_DB.Model(&Log{}).Select("id").Order("created_at ASC").Limit(currentBatch)
-		result := LOG_DB.Where("id IN (?)", subQuery).Delete(&Log{})
-		if result.Error != nil {
-			return deleted, result.Error
-		}
-
-		deleted += result.RowsAffected
-		if result.RowsAffected == 0 {
-			break
-		}
+	// 找到第 maxCount 条记录的时间戳（按时间倒序，即保留的最后一条）
+	var cutoffLog Log
+	err := LOG_DB.Model(&Log{}).
+		Select("created_at").
+		Order("created_at DESC").
+		Offset(maxCount - 1).
+		Limit(1).
+		First(&cutoffLog).Error
+	if err != nil {
+		return 0, err
 	}
 
-	return deleted, nil
+	// 删除该时间戳之前的所有记录
+	result := LOG_DB.Where("created_at < ?", cutoffLog.CreatedAt).Delete(&Log{})
+	if result.Error != nil {
+		return 0, result.Error
+	}
+
+	return result.RowsAffected, nil
 }
 
 // StartLogAutoCleanTask 启动日志自动清理定时任务
