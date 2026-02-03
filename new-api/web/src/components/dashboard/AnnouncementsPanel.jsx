@@ -89,7 +89,7 @@ const AnnouncementsPanel = ({
                   extra={
                     item.extra ? (
                       <div
-                        className='text-xs text-gray-500'
+                        className='notice-content text-xs text-gray-500'
                         dangerouslySetInnerHTML={{ __html: htmlExtra }}
                       />
                     ) : null
@@ -97,6 +97,7 @@ const AnnouncementsPanel = ({
                 >
                   <div>
                     <div
+                      className='notice-content'
                       dangerouslySetInnerHTML={{
                         __html: marked.parse(item.content || ''),
                       }}

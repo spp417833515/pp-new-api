@@ -18,8 +18,8 @@
   /* ==================== 背景 ==================== */
   /* 调亮版渐变 - 减少压抑感 */
   --theme-bg-gradient: linear-gradient(135deg, #1a1a1a 0%, #252538 30%, #1e2d4d 60%, #1a4070 100%);
-  --theme-bg-base: #1a1a1a;
-  --theme-bg-elevated: #252538;
+  --theme-bg-base: transparent;
+  --theme-bg-elevated: rgba(37, 37, 56, 0.7);
 
   /* ==================== 主色/点缀色 ==================== */
   --theme-accent: #00d9ff;
@@ -142,9 +142,9 @@
   --semi-color-primary-active: var(--theme-accent-active);
   --semi-color-primary-light-default: var(--theme-active-bg);
 
-  /* 背景 */
-  --semi-color-bg-0: var(--theme-bg-base);
-  --semi-color-bg-1: var(--theme-bg-elevated);
+  /* 背景 - 透明/半透明以显示星空 */
+  --semi-color-bg-0: transparent;
+  --semi-color-bg-1: rgba(37, 37, 56, 0.7);
   --semi-color-bg-2: rgba(255, 255, 255, 0.04);
   --semi-color-bg-3: rgba(255, 255, 255, 0.06);
   --semi-color-bg-4: rgba(255, 255, 255, 0.08);
@@ -185,8 +185,8 @@ body .semi-always-dark,
 :host,
 :host .semi-always-dark,
 :host([theme-mode=dark]) {
-  --semi-color-bg-0: #1a1a1a !important;
-  --semi-color-bg-1: #252538 !important;
+  --semi-color-bg-0: transparent !important;
+  --semi-color-bg-1: rgba(37, 37, 56, 0.7) !important;
   --semi-color-bg-2: rgba(255, 255, 255, 0.04) !important;
   --semi-color-bg-3: rgba(255, 255, 255, 0.06) !important;
   --semi-color-bg-4: rgba(255, 255, 255, 0.08) !important;

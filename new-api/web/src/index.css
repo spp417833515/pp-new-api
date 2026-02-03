@@ -39,7 +39,12 @@ body.sidebar-collapsed {
 }
 
 html, body {
-  background: var(--theme-bg-gradient);
+  background: #0a0a1a;
+  min-height: 100vh;
+}
+
+#root {
+  background: transparent;
   min-height: 100vh;
 }
 
@@ -106,8 +111,13 @@ code {
 .semi-layout-content,
 .semi-layout-header,
 .semi-layout-footer,
-.semi-layout-sider {
+.semi-layout-sider,
+.semi-layout .semi-layout,
+.semi-layout .semi-layout-content,
+.semi-layout-has-sider,
+div[class*="semi-layout"] {
   background: transparent !important;
+  background-color: transparent !important;
 }
 
 /* ==================== 顶栏样式 ==================== */
@@ -715,12 +725,61 @@ code {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, var(--theme-glass-bg) 100%) !important;
 }
 
+/* ==================== SelectableButtonGroup 样式 ==================== */
+/* 模型广场筛选按钮组 - 支持长文本双排显示 */
+.sbg-button {
+  height: auto !important;
+  min-height: 32px !important;
+  padding: 4px 8px !important;
+}
+
+.sbg-button .semi-button-content {
+  width: 100%;
+}
+
+.sbg-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
+}
+
+.sbg-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  flex: 1;
+  min-width: 0;
+}
+
+.sbg-tag {
+  flex-shrink: 0;
+}
+
+.sbg-icon {
+  flex-shrink: 0;
+}
+
+/* 紧凑模式下允许换行 */
+.sbg-compact .sbg-content {
+  flex-wrap: wrap;
+}
+
+.sbg-compact .sbg-ellipsis {
+  white-space: normal;
+  word-break: break-word;
+}
+
 /* ==================== 表格样式 ==================== */
 /* 关键修复: 在表格容器上重新定义 --semi-color-bg-1 变量 */
 /* Semi-UI 固定列使用内联样式 background: var(--semi-color-bg-1) */
 /* 通过在表格上设置这个变量，内联样式会使用我们的值 */
 .semi-table {
-  --semi-color-bg-1: #252538 !important;
+  --semi-color-bg-1: rgba(37, 37, 56, 0.85) !important;
   border-radius: var(--theme-radius-lg) !important;
   overflow: hidden;
   border: 1px solid var(--theme-glass-border) !important;
@@ -770,12 +829,18 @@ code {
 /* ============================================================ */
 
 /* 核心修复: 在固定列单元格上设置 CSS 变量，内联样式会使用这个值 */
+/* 包含 tbody 内容区域和 thead 标题区域 */
 .semi-table-cell-fixed-left,
 .semi-table-cell-fixed-right,
 .semi-table-cell-fixed-left-last,
 .semi-table-cell-fixed-right-first,
-[class*="semi-table-cell-fixed"] {
-  --semi-color-bg-1: #252538 !important;
+[class*="semi-table-cell-fixed"],
+.semi-table-row-head.semi-table-cell-fixed-left,
+.semi-table-row-head.semi-table-cell-fixed-right,
+.semi-table-row-head.semi-table-cell-fixed-left-last,
+.semi-table-row-head.semi-table-cell-fixed-right-first,
+.semi-table-thead .semi-table-row-head[class*="semi-table-cell-fixed"] {
+  --semi-color-bg-1: rgba(37, 37, 56, 0.9) !important;
 }
 
 /* 悬停状态: 修改变量值实现悬停效果 */
@@ -784,7 +849,7 @@ code {
 .semi-table-tbody > .semi-table-row:hover > .semi-table-cell-fixed-left-last,
 .semi-table-tbody > .semi-table-row:hover > .semi-table-cell-fixed-right-first,
 .semi-table-tbody > .semi-table-row:hover > [class*="semi-table-cell-fixed"] {
-  --semi-color-bg-1: rgba(50, 52, 70, 1) !important;
+  --semi-color-bg-1: rgba(50, 52, 70, 0.9) !important;
 }
 
 .semi-table-tbody > .semi-table-row:last-child > .semi-table-row-cell {
@@ -1238,6 +1303,140 @@ code {
   width: 0 !important;
   height: 0 !important;
   display: none !important;
+}
+
+/* ==================== 公告内容样式 ==================== */
+/* 支持完整 HTML/CSS 渲染，提供基础排版样式 */
+.notice-content {
+  line-height: 1.7;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: var(--theme-text-primary);
+}
+
+/* 标题样式 */
+.notice-content h1,
+.notice-content h2,
+.notice-content h3,
+.notice-content h4,
+.notice-content h5,
+.notice-content h6 {
+  margin: 0.8em 0 0.5em;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--theme-text-primary);
+}
+
+.notice-content h1 { font-size: 1.5em; }
+.notice-content h2 { font-size: 1.3em; }
+.notice-content h3 { font-size: 1.15em; }
+.notice-content h4 { font-size: 1em; }
+
+/* 段落和文本 */
+.notice-content p {
+  margin: 0.6em 0;
+}
+
+.notice-content strong,
+.notice-content b {
+  font-weight: 600;
+  color: var(--theme-text-primary);
+}
+
+/* 链接样式 */
+.notice-content a {
+  color: var(--theme-accent);
+  text-decoration: none;
+  transition: opacity var(--theme-transition-fast);
+}
+
+.notice-content a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* 列表样式 */
+.notice-content ul,
+.notice-content ol {
+  margin: 0.6em 0;
+  padding-left: 1.5em;
+}
+
+.notice-content li {
+  margin: 0.3em 0;
+}
+
+.notice-content ul {
+  list-style-type: disc;
+}
+
+.notice-content ol {
+  list-style-type: decimal;
+}
+
+/* 代码样式 */
+.notice-content code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.15em 0.4em;
+  border-radius: var(--theme-radius-xs);
+  font-family: var(--theme-font-mono);
+  font-size: 0.9em;
+}
+
+.notice-content pre {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1em;
+  border-radius: var(--theme-radius-md);
+  overflow-x: auto;
+  margin: 0.8em 0;
+}
+
+.notice-content pre code {
+  background: transparent;
+  padding: 0;
+}
+
+/* 引用样式 */
+.notice-content blockquote {
+  margin: 0.8em 0;
+  padding: 0.5em 1em;
+  border-left: 3px solid var(--theme-accent);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0 var(--theme-radius-sm) var(--theme-radius-sm) 0;
+}
+
+/* 表格样式 */
+.notice-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.8em 0;
+}
+
+.notice-content th,
+.notice-content td {
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--theme-glass-border);
+  text-align: left;
+}
+
+.notice-content th {
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+}
+
+/* 分割线 */
+.notice-content hr {
+  border: none;
+  height: 1px;
+  background: var(--theme-glass-border);
+  margin: 1em 0;
+}
+
+/* 图片样式 */
+.notice-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--theme-radius-md);
 }
 
 /* ==================== 响应式适配 ==================== */

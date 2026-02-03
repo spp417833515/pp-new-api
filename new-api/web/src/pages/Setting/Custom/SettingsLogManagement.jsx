@@ -45,6 +45,7 @@ export default function SettingsLogManagement(props) {
   const [loading, setLoading] = useState(false);
   const [cleanLoading, setCleanLoading] = useState(false);
   const [cleanHistoryLoading, setCleanHistoryLoading] = useState(false);
+  const [clearAllLoading, setClearAllLoading] = useState(false);
   const [inputs, setInputs] = useState({
     // 日志记录
     LogConsumeEnabled: false,
@@ -101,12 +102,13 @@ export default function SettingsLogManagement(props) {
 
   // 手动清理日志 (按条数)
   async function onCleanLogs() {
+    const maxCount = inputs.LogMaxCount || 100000;
     setCleanLoading(true);
     try {
-      const res = await API.post('/api/log/clean');
+      const res = await API.post(`/api/log/clean?max_count=${maxCount}`);
       const { success, message, data } = res.data;
       if (success) {
-        showSuccess(t('已清理 {{count}} 条日志', { count: data.deleted }));
+        showSuccess(t('已清理 {{count}} 条日志，保留最新 {{max}} 条', { count: data.deleted, max: data.max_count }));
       } else {
         showError(message || t('清理失败'));
       }
@@ -115,6 +117,49 @@ export default function SettingsLogManagement(props) {
     } finally {
       setCleanLoading(false);
     }
+  }
+
+  // 清空全部日志
+  function onClearAllLogs() {
+    Modal.confirm({
+      title: t('确认清空全部日志'),
+      content: (
+        <div style={{ lineHeight: '1.8' }}>
+          <div
+            style={{
+              background: 'var(--theme-danger-bg)',
+              border: '1px solid var(--theme-danger-border)',
+              padding: '12px',
+              borderRadius: '4px',
+            }}
+          >
+            <Text strong style={{ color: 'var(--theme-danger)' }}>
+              ⚠️ {t('警告')}：
+            </Text>
+            <Text>{t('此操作将删除所有使用日志，且不可恢复！')}</Text>
+          </div>
+        </div>
+      ),
+      okText: t('确认清空'),
+      cancelText: t('取消'),
+      okType: 'danger',
+      onOk: async () => {
+        try {
+          setClearAllLoading(true);
+          const res = await API.delete('/api/log/all');
+          const { success, message, data } = res.data;
+          if (success) {
+            showSuccess(t('已清空 {{count}} 条日志', { count: data.deleted }));
+          } else {
+            showError(message || t('清空失败'));
+          }
+        } catch (error) {
+          showError(t('清空失败，请重试'));
+        } finally {
+          setClearAllLoading(false);
+        }
+      },
+    });
   }
 
   // 清除历史日志 (按时间)
@@ -327,7 +372,7 @@ export default function SettingsLogManagement(props) {
           <Form.Section text={t('手动清理')}>
             <Row gutter={16}>
               {/* 按条数清理 */}
-              <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+              <Col xs={24} sm={12} md={8} lg={8} xl={8}>
                 <div style={{ marginBottom: 16 }}>
                   <Text strong style={{ display: 'block', marginBottom: 8 }}>
                     {t('按条数清理')}
@@ -347,7 +392,7 @@ export default function SettingsLogManagement(props) {
                 </div>
               </Col>
               {/* 按时间清理 */}
-              <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+              <Col xs={24} sm={12} md={8} lg={8} xl={8}>
                 <Spin spinning={cleanHistoryLoading}>
                   <Text strong style={{ display: 'block', marginBottom: 8 }}>
                     {t('按时间清理')}
@@ -379,6 +424,26 @@ export default function SettingsLogManagement(props) {
                     {t('清除历史日志')}
                   </Button>
                 </Spin>
+              </Col>
+              {/* 全部清理 */}
+              <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+                <div style={{ marginBottom: 16 }}>
+                  <Text strong style={{ display: 'block', marginBottom: 8 }}>
+                    {t('全部清理')}
+                  </Text>
+                  <Text type='tertiary' size='small' style={{ display: 'block', marginBottom: 12 }}>
+                    {t('清空所有使用日志，此操作不可恢复')}
+                  </Text>
+                  <Button
+                    type='danger'
+                    theme='solid'
+                    size='default'
+                    loading={clearAllLoading}
+                    onClick={onClearAllLogs}
+                  >
+                    {t('清空全部日志')}
+                  </Button>
+                </div>
               </Col>
             </Row>
           </Form.Section>

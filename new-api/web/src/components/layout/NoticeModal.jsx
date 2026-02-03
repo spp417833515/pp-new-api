@@ -144,7 +144,7 @@ const NoticeModal = ({
     return (
       <div
         dangerouslySetInnerHTML={{ __html: noticeContent }}
-        className='notice-content-scroll max-h-[55vh] overflow-y-auto pr-2'
+        className='notice-content notice-content-scroll max-h-[55vh] overflow-y-auto pr-2'
       />
     );
   };
@@ -189,7 +189,7 @@ const NoticeModal = ({
               >
                 <div>
                   <div
-                    className={item.isUnread ? 'shine-text' : ''}
+                    className={`notice-content ${item.isUnread ? 'shine-text' : ''}`}
                     dangerouslySetInnerHTML={{ __html: htmlContent }}
                   />
                 </div>

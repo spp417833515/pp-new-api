@@ -23,6 +23,7 @@ import SiderBar from './SiderBar';
 import App from '../../App';
 import FooterBar from './Footer';
 import UpdateNotice from '../common/ui/UpdateNotice';
+import StarfieldCanvas from '../common/ui/StarfieldCanvas';
 import { ToastContainer } from 'react-toastify';
 import React, { useContext, useEffect, useState } from 'react';
 import { useIsMobile } from '../../hooks/common/useIsMobile';
@@ -129,6 +130,8 @@ const PageLayout = () => {
         overflow: isMobile ? 'visible' : 'hidden',
       }}
     >
+      {/* 全局星空背景 - 淡化效果 (60%透明度 + 1.5px模糊) */}
+      <StarfieldCanvas opacity={0.6} blur={1.5} zIndex={0} />
       <Header
         style={{
           padding: 0,

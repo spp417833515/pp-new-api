@@ -3,13 +3,16 @@ FROM oven/bun:latest AS builder
 WORKDIR /build
 COPY web/package.json .
 COPY web/bun.lock .
-RUN bun install
+# 使用阿里云 npm 镜像加速
+RUN bun config set registry https://registry.npmmirror.com && bun install
 COPY ./web .
 COPY ./VERSION .
 RUN DISABLE_ESLINT_PLUGIN='true' VITE_REACT_APP_VERSION=$(cat VERSION) bun run build
 
 FROM golang:alpine AS builder2
 ENV GO111MODULE=on CGO_ENABLED=0
+# 使用七牛云 Go 代理加速
+ENV GOPROXY=https://goproxy.cn,direct
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -27,8 +30,15 @@ RUN go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$
 
 FROM debian:bookworm-slim
 
+# 安装基础依赖 + Docker CLI (从官方源获取最新版)
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates tzdata libasan8 wget docker.io \
+    && apt-get install -y --no-install-recommends ca-certificates tzdata libasan8 wget curl gnupg \
+    && install -m 0755 -d /etc/apt/keyrings \
+    && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+    && chmod a+r /etc/apt/keyrings/docker.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian bookworm stable" > /etc/apt/sources.list.d/docker.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends docker-ce-cli \
     && rm -rf /var/lib/apt/lists/* \
     && update-ca-certificates
 

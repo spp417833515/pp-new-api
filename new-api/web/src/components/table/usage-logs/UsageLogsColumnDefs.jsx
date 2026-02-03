@@ -474,10 +474,37 @@ export const getLogsColumns = ({
           return <></>;
         }
         let other = getLogOther(record.other);
-        const cacheCreation = (other?.cache_creation_tokens || 0) +
-          (other?.cache_creation_tokens_5m || 0) +
-          (other?.cache_creation_tokens_1h || 0);
-        return <span>{cacheCreation}</span>;
+        const tokens5m = other?.cache_creation_tokens_5m || 0;
+        const tokens1h = other?.cache_creation_tokens_1h || 0;
+        const tokensLegacy = other?.cache_creation_tokens || 0;
+
+        // 有分离数据时使用 5m/1h，否则使用旧版总计
+        const hasSplitData = tokens5m > 0 || tokens1h > 0;
+
+        if (!hasSplitData) {
+          // 旧版 API：只显示总计，无标识
+          return tokensLegacy > 0 ? <span>{tokensLegacy}</span> : <></>;
+        }
+
+        // 新版 API：显示分离数据 + 标识
+        const parts = [];
+        if (tokens5m > 0) {
+          parts.push(<span key="5m">{tokens5m} <Tag size="small" color="cyan">[5M]</Tag></span>);
+        }
+        if (tokens1h > 0) {
+          parts.push(<span key="1h">{tokens1h} <Tag size="small" color="blue">[1H]</Tag></span>);
+        }
+
+        return (
+          <span className="flex items-center gap-1 flex-wrap">
+            {parts.map((part, idx) => (
+              <span key={idx} className="flex items-center gap-1">
+                {idx > 0 && <span>+</span>}
+                {part}
+              </span>
+            ))}
+          </span>
+        );
       },
     },
     {

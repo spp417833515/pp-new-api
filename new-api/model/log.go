@@ -412,6 +412,12 @@ func DeleteOldLog(ctx context.Context, targetTimestamp int64, limit int) (int64,
 	return total, nil
 }
 
+// ClearAllLogs 清空全部日志
+func ClearAllLogs() (int64, error) {
+	result := LOG_DB.Where("1 = 1").Delete(&Log{})
+	return result.RowsAffected, result.Error
+}
+
 // CleanLogByCount 按数量清理日志，保留最新的 maxCount 条
 // 使用时间戳删除法：找到第 maxCount 条记录的时间戳，删除之前的所有记录
 func CleanLogByCount(maxCount int) (int64, error) {

@@ -40,7 +40,7 @@ const PricingPage = () => {
   };
 
   return (
-    <div className='bg-white'>
+    <div className='bg-transparent'>
       <Layout className='pricing-layout'>
         {!isMobile && (
           <Sider className='pricing-scroll-hide pricing-sidebar'>
