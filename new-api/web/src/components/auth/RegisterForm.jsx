@@ -62,6 +62,7 @@ import { UserContext } from '../../context/User';
 import { StatusContext } from '../../context/Status';
 import { useTranslation } from 'react-i18next';
 import { SiDiscord } from 'react-icons/si';
+import StarfieldCanvas from '../common/ui/StarfieldCanvas';
 
 const RegisterForm = () => {
   let navigate = useNavigate();
@@ -733,17 +734,21 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className='relative overflow-hidden bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-      {/* 背景模糊晕染球 */}
+    <div
+      className='relative overflow-hidden flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'
+      style={{ background: 'var(--theme-bg-gradient)', minHeight: '100vh' }}
+    >
+      {/* 星空背景 */}
+      <StarfieldCanvas opacity={0.6} blur={1.5} zIndex={0} />
+      {/* 注册卡片 - 20% 透明度毛玻璃效果 */}
       <div
-        className='blur-ball blur-ball-indigo'
-        style={{ top: '-80px', right: '-80px', transform: 'none' }}
-      />
-      <div
-        className='blur-ball blur-ball-teal'
-        style={{ top: '50%', left: '-120px' }}
-      />
-      <div className='w-full max-w-sm mt-[60px]'>
+        className='w-full max-w-sm mt-[60px] rounded-2xl p-6'
+        style={{
+          background: 'rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+        }}
+      >
         {showEmailRegister ||
         !(
           status.github_oauth ||

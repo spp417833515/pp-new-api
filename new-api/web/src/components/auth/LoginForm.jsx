@@ -54,6 +54,7 @@ import OIDCIcon from '../common/logo/OIDCIcon';
 import WeChatIcon from '../common/logo/WeChatIcon';
 import LinuxDoIcon from '../common/logo/LinuxDoIcon';
 import TwoFAVerification from './TwoFAVerification';
+import StarfieldCanvas from '../common/ui/StarfieldCanvas';
 import { useTranslation } from 'react-i18next';
 import { SiDiscord }from 'react-icons/si';
 
@@ -890,6 +891,8 @@ const LoginForm = () => {
       className='relative overflow-hidden flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'
       style={{ background: 'var(--theme-bg-gradient)', minHeight: '100vh' }}
     >
+      {/* 星空背景 */}
+      <StarfieldCanvas opacity={0.6} blur={1.5} zIndex={0} />
       {/* 登录卡片 - 20% 透明度毛玻璃效果 */}
       <div
         className='w-full max-w-sm mt-[60px] rounded-2xl p-6'
