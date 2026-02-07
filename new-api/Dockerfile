@@ -4,7 +4,7 @@ WORKDIR /build
 COPY web/package.json .
 COPY web/bun.lock .
 # 使用阿里云 npm 镜像加速
-RUN bun config set registry https://registry.npmmirror.com && bun install
+RUN echo '[install]\nregistry = "https://registry.npmmirror.com"' > bunfig.toml && bun install
 COPY ./web .
 COPY ./VERSION .
 RUN DISABLE_ESLINT_PLUGIN='true' VITE_REACT_APP_VERSION=$(cat VERSION) bun run build
