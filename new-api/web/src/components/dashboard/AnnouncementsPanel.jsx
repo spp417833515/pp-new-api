@@ -21,6 +21,7 @@ import React from 'react';
 import { Card, Tag, Timeline, Empty } from '@douyinfe/semi-ui';
 import { Bell } from 'lucide-react';
 import { marked } from 'marked';
+import { sanitizeHTML } from '../../helpers';
 import {
   IllustrationConstruction,
   IllustrationConstructionDark,
@@ -90,7 +91,7 @@ const AnnouncementsPanel = ({
                     item.extra ? (
                       <div
                         className='notice-content text-xs text-gray-500'
-                        dangerouslySetInnerHTML={{ __html: htmlExtra }}
+                        dangerouslySetInnerHTML={{ __html: sanitizeHTML(htmlExtra) }}
                       />
                     ) : null
                   }
@@ -99,7 +100,7 @@ const AnnouncementsPanel = ({
                     <div
                       className='notice-content'
                       dangerouslySetInnerHTML={{
-                        __html: marked.parse(item.content || ''),
+                        __html: sanitizeHTML(marked.parse(item.content || '')),
                       }}
                     />
                   </div>

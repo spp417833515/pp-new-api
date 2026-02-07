@@ -50,7 +50,7 @@ const StarfieldCanvas = ({ opacity = 1, blur = 0, zIndex = 0 }) => {
     // 初始化星星（带漂移速度）
     const initStars = () => {
       starsRef.current = [];
-      const starCount = Math.floor((width * height) / 6000);
+      const starCount = Math.min(Math.floor((width * height) / 6000), 800);
       for (let i = 0; i < starCount; i++) {
         starsRef.current.push({
           x: Math.random() * width,
